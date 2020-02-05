@@ -45,6 +45,7 @@
     <Compile Include="Componets\BasicComponents.cs" />
     <Compile Include="ECSCore\Entity.cs" />
     <Compile Include="ECSCore\Scene.cs" />
+    <Compile Include="Entities\Bullet.cs" />
     <Compile Include="Entities\StaticObject.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Entities\Player.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Systems\CollisionHandler.cs" />
     <Compile Include="Systems\InputManager.cs" />
+    <Compile Include="Systems\PhysicsHandler.cs" />
     <Compile Include="Systems\Renderer.cs" />
   </ItemGroup>
   <ItemGroup>

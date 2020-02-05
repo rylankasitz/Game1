@@ -9,22 +9,25 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter
 {
-    public class SceneManager
+    public static class SceneManager
     {
-        private List<Scene> scenes = new List<Scene>();
-        private List<ECSCore.System> systems;
+        public static List<ECSCore.System> systems { get; set; }
 
-        private Scene currentScene;
+        private static Scene currentScene;
+        private static List<Scene> scenes = new List<Scene>();  
 
-        public SceneManager(List<ECSCore.System> systems)
+        public static void Initialize(GameManager game)
         {
-            this.systems = systems;
-
             // Add all scenes here
-            scenes.Add(new MainScene());
+            scenes.Add(new MainScene(game));
         }
 
-        public void SetScene(string name)
+        public static Scene GetCurrentScene()
+        {
+            return currentScene;
+        }
+
+        public static void SetScene(string name)
         {
             foreach(Scene scene in scenes)
             {
@@ -33,12 +36,12 @@ namespace MonoGameWindowsStarter
             }
         }
 
-        public void LoadScene()
+        public static void LoadScene()
         {
             currentScene.LoadScene(systems);
         }
 
-        public void UpdateScene(GameTime gameTime)
+        public static void UpdateScene(GameTime gameTime)
         {
             currentScene.UpdateScene(gameTime);
         }

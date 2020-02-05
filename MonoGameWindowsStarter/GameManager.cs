@@ -13,15 +13,17 @@ namespace MonoGameWindowsStarter
 {
     public class GameManager : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public int WindowWidth { get; set; } = 1920;
+        public int WindowHeight { get; set; } = 1080;
+
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
         private List<ECSCore.System> systems = new List<ECSCore.System>();
 
         private Renderer renderer;
         private CollisionHandler collisionHandler;
-
-        private SceneManager sceneManager;
+        private PhysicsHandler physicsHandler;
 
         public GameManager()
         {
@@ -31,14 +33,20 @@ namespace MonoGameWindowsStarter
             // Systems
             systems.Add(renderer = new Renderer());
             systems.Add(collisionHandler = new CollisionHandler());
-
-            sceneManager = new SceneManager(systems);
-            sceneManager.SetScene("testScene");
+            systems.Add(physicsHandler = new PhysicsHandler());    
         }
 
         protected override void Initialize()
         {
-            sceneManager.LoadScene();
+            graphics.PreferredBackBufferWidth = WindowWidth;
+            graphics.PreferredBackBufferHeight = WindowHeight;
+            graphics.ApplyChanges();
+
+            SceneManager.systems = systems;
+            SceneManager.Initialize(this);
+
+            SceneManager.SetScene("testScene");
+            SceneManager.LoadScene();
 
             base.Initialize();
         }
@@ -62,15 +70,12 @@ namespace MonoGameWindowsStarter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            sceneManager.UpdateScene(gameTime);
+            SceneManager.UpdateScene(gameTime);
 
+            physicsHandler.HandlePhysics();
             collisionHandler.CheckCollisions();
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
-
-            // Fps
-            float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            // Console.WriteLine(Math.Round(frameRate));
 
             base.Update(gameTime);
         }

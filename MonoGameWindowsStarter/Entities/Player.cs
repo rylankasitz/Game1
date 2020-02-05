@@ -15,57 +15,97 @@ namespace MonoGameWindowsStarter.Entities
 {
     class Player : Entity
     {
-        Sprite sprite;
-        Transform transform;
-        BoxCollision boxCollision;
+        private Sprite sprite;
+        private Transform transform;
+        private BoxCollision boxCollision;
+        private Physics physics;
 
         private int speed = 5;
+        private float fireRate = .3f;
+        private float bulletSpeed = 10;
+
+        private float timeSinceShot;
 
         public override void Initialize()
         {
             sprite = AddComponent<Sprite>();
             transform = AddComponent<Transform>();
             boxCollision = AddComponent<BoxCollision>();
+            physics = AddComponent<Physics>();
 
-            sprite.ContentName = "test";
+            sprite.ContentName = "CharacterSpriteSheet";
+            sprite.SpriteLocation = new Rectangle(17, 397, 30, 49);
 
-            transform.X = 0;
-            transform.Y = 0;
-            transform.Width = 100;
-            transform.Height = 100;
+            transform.X = 100;
+            transform.Y = 100;
+            transform.Width = 37;
+            transform.Height = 54;
 
-            boxCollision.Static = false;
             boxCollision.HandleCollision = handleCollision;
+
+            timeSinceShot = fireRate;       
         }
 
         public override void Update(GameTime gameTime)
         {
-            move();     
+            move();
+
+            timeSinceShot += (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (InputManager.LeftMousePressed() && fireRate < timeSinceShot)
+            {
+                fire();
+                timeSinceShot = 0;
+            }
         }
 
         private void handleCollision(BoxCollision collider)
         {
-            Console.WriteLine(collider.Transform.Name);
+            // Handle Collision
         }
 
         private void move()
         {
+            physics.Velocity.X = 0;
+            physics.Velocity.Y = 0;
+
             if (InputManager.KeyPressed(Keys.W))
             {
-                transform.Y -= speed;
+                physics.Velocity.Y = -speed;
             }
             if (InputManager.KeyPressed(Keys.S))
             {
-                transform.Y += speed;
+                physics.Velocity.Y = speed;
             }
             if (InputManager.KeyPressed(Keys.A))
             {
-                transform.X -= speed;
+                physics.Velocity.X = -speed;
             }
             if (InputManager.KeyPressed(Keys.D))
             {
-                transform.X += speed;
+                physics.Velocity.X = speed;
             }
+        }
+
+        private void fire()
+        {      
+            Bullet bullet = new Bullet();
+            SceneManager.GetCurrentScene().AddEntity(bullet);
+
+            Vector2 mouseVector = -Vector2.Normalize(new Vector2(transform.X, transform.Y) - InputManager.GetMousePosition());
+            
+            float rotation = (float) Math.Atan2(mouseVector.Y, mouseVector.X);
+
+            Transform bulletPos = bullet.GetComponent<Transform>();
+            Physics bulletPhys = bullet.GetComponent<Physics>();
+            Vector2 velocity = mouseVector * bulletSpeed;
+
+            bulletPos.X = transform.X + transform.Width/2;
+            bulletPos.Y = transform.Y + transform.Height/2;
+            bulletPos.Rotation = rotation;
+
+            bulletPhys.Velocity.X = velocity.X;
+            bulletPhys.Velocity.Y = velocity.Y;
         }
     }
 }

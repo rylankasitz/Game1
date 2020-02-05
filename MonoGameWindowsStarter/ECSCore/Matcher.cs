@@ -20,16 +20,21 @@ namespace MonoGameWindowsStarter.ECSCore
             List<Entity> matchedEntities = new List<Entity>();
             foreach (Entity entity in allEntities)
             {
-                bool addable = true;
-                foreach (Type type in types)
-                {
-                    if (!entity.Components.Keys.Contains(type.ToString())) addable = false;
-                }
-
-                if (addable) matchedEntities.Add(entity);
+                if (MatchEntity(types, entity)) matchedEntities.Add(entity);
             }
 
             return matchedEntities;
+        }
+
+        public bool MatchEntity(List<Type> types, Entity entity)
+        {
+            bool addable = true;
+            foreach (Type type in types)
+            {
+                if (!entity.Components.Keys.Contains(type.ToString())) addable = false;
+            }
+
+            return addable;
         }
     }
 }

@@ -13,17 +13,42 @@ namespace MonoGameWindowsStarter.ECSCore
 
         public string Name { get; set; } = "Unamed Scene";
 
+        private Matcher matcher;
+        private List<System> systems;
+
+        public void AddEntity(Entity entity)
+        {
+            entity.Initialize();
+
+            foreach (System system in systems)
+            {
+                system.AddEntity(entity, matcher);
+            }
+
+            Entities.Add(entity);
+        }
+
+        public void RemoveEntity(Entity entity)
+        {
+            foreach (System system in systems)
+            {
+                system.RemoveEntity(entity);
+            }
+
+            Entities.Remove(entity);
+        }
+
         public void LoadScene(List<System> systems)
         {
-            Matcher matcher = new Matcher(Entities);
+            this.systems = systems;
 
-            // Initialize Entities
+            matcher = new Matcher(Entities);
+
             foreach (Entity entity in Entities)
             {
                 entity.Initialize();
             }
 
-            // Initialize Systems
             foreach (System system in systems)
             {
                 system.LoadEntities(matcher);
@@ -33,9 +58,9 @@ namespace MonoGameWindowsStarter.ECSCore
 
         public void UpdateScene(GameTime gameTime)
         {
-            foreach (Entity entity in Entities)
+            for (int i = 0;  i < Entities.Count; i++)
             {
-                entity.Update(gameTime);
+                Entities[i].Update(gameTime);
             }
         }
     }

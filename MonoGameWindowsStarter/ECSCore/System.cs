@@ -16,6 +16,21 @@ namespace MonoGameWindowsStarter.ECSCore
             Entities = matcher.Match(Components);
         }
 
+        public void AddEntity(Entity entity, Matcher matcher)
+        {
+            if (matcher.MatchEntity(Components, entity))
+            {
+                InitializeEntity(entity);
+                Entities.Add(entity);
+            }
+        }
+
+        public void RemoveEntity(Entity entity)
+        {
+            Entities.Remove(entity);
+        }
+
+        public abstract void InitializeEntity(Entity entity);
         public abstract void Initialize();
     }
 }

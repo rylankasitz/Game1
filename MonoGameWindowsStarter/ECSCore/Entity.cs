@@ -23,6 +23,10 @@ namespace MonoGameWindowsStarter.ECSCore
             return (T) Components[typeof(T).ToString()];
         }
 
+        public bool HasComponent<T>() where T : Component, new()
+        {
+            return Components.Keys.Contains(typeof(T).ToString());
+        }
 
         public abstract void Initialize();
         public abstract void Update(GameTime gameTime);

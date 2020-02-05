@@ -11,26 +11,37 @@ namespace MonoGameWindowsStarter.Entities
 {
     public class StaticObject : Entity
     {
-        public Sprite Sprite { get; set; } = new Sprite();
-        public Transform Transform { get; set; } = new Transform();
-        public BoxCollision BoxCollision { get; set; } = new BoxCollision();
+        private int x, y, w, h;
+        private string contentName;
+        private Rectangle spriteLocation;
+
+        public StaticObject(int x, int y, int w, int h, string contentName, Rectangle spriteLocation)
+        {
+            this.x = x;
+            this.y = y;
+            this.h = h;
+            this.w = w;
+
+            this.contentName = contentName;
+            this.spriteLocation = spriteLocation;
+        }
 
         public override void Initialize()
         {
-            Sprite = AddComponent<Sprite>();
-            Transform = AddComponent<Transform>();
-            BoxCollision = AddComponent<BoxCollision>();
+            Sprite sprite = AddComponent<Sprite>();
+            Transform transform = AddComponent<Transform>();
+            BoxCollision boxCollision = AddComponent<BoxCollision>();
 
-            Transform.X = 300;
-            Transform.Y = 300;
-            Transform.Width = 100;
-            Transform.Height = 200;
+            transform.Name = "StaticObject";
+            transform.X = x;
+            transform.Y = y;
+            transform.Height = h;
+            transform.Width = w;
 
-            BoxCollision.Static = true;
+            sprite.ContentName = contentName;
+            sprite.SpriteLocation = spriteLocation;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-        }
+        public override void Update(GameTime gameTime) { }
     }
 }
