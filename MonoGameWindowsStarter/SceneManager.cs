@@ -44,6 +44,7 @@ namespace MonoGameWindowsStarter
         public static void UpdateScene(GameTime gameTime)
         {
             currentScene.UpdateScene(gameTime);
+            currentScene.Update(gameTime);
         }
     }
 }

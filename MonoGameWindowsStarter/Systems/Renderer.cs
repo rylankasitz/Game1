@@ -54,7 +54,7 @@ namespace MonoGameWindowsStarter.Systems
                 Sprite sprite = entity.GetComponent<Sprite>();
 
                 spriteBatch.Draw(sprite.Texture, new Rectangle(transform.X, transform.Y, transform.Width, transform.Height),
-                    sprite.SpriteLocation, Color.White, transform.Rotation, new Vector2(0, 0),
+                    sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
                     SpriteEffects.None, 1f);  
             }
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.ECSCore
 {
-    public class Scene
+    public abstract class Scene
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
 
@@ -15,6 +15,8 @@ namespace MonoGameWindowsStarter.ECSCore
 
         private Matcher matcher;
         private List<System> systems;
+
+        public abstract void Update(GameTime gameTime);
 
         public void AddEntity(Entity entity)
         {

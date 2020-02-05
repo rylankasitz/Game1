@@ -22,6 +22,7 @@ namespace MonoGameWindowsStarter.Componets
         public string ContentName { get; set; } = "test";
         public Texture2D Texture { get; set; }
         public Rectangle SpriteLocation { get; set; }
+        public Color Color { get; set; } = Color.White;
     }
 
     public class Transform : Component

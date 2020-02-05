@@ -26,6 +26,7 @@ namespace MonoGameWindowsStarter.Entities
             sprite.ContentName = "BulletsSpriteSheet";
             sprite.SpriteLocation = new Rectangle(249, 9, 18, 9);
 
+            transform.Name = "Bullet";
             transform.Width = 18;
             transform.Height = 9;
 
@@ -39,7 +40,7 @@ namespace MonoGameWindowsStarter.Entities
 
         private void handleCollision(BoxCollision collider)
         {
-            if (collider.Transform.Name == "StaticObject")
+            if (collider.Transform.Name == "StaticObject" || collider.Transform.Name == "Enemy")
             {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
             }

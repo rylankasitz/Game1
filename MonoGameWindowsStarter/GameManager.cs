@@ -13,8 +13,8 @@ namespace MonoGameWindowsStarter
 {
     public class GameManager : Game
     {
-        public int WindowWidth { get; set; } = 1920;
-        public int WindowHeight { get; set; } = 1080;
+        public int WindowWidth { get; set; } = 1920/2;
+        public int WindowHeight { get; set; } = 1080/2;
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -82,7 +82,7 @@ namespace MonoGameWindowsStarter
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightGray);
 
             spriteBatch.Begin();
 
