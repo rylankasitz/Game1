@@ -36,10 +36,8 @@ namespace MonoGameWindowsStarter.Entities
             sprite.ContentName = "CharacterSpriteSheet";
             sprite.SpriteLocation = new Rectangle(17, 397, 30, 49);
 
-            transform.X = 100;
-            transform.Y = 100;
-            transform.Width = 37;
-            transform.Height = 54;
+            transform.Position = new Vector(100, 100);
+            transform.Scale = new Vector(37, 54);
 
             boxCollision.HandleCollision = handleCollision;
 
@@ -92,7 +90,7 @@ namespace MonoGameWindowsStarter.Entities
             Bullet bullet = new Bullet();
             SceneManager.GetCurrentScene().AddEntity(bullet);
 
-            Vector2 mouseVector = -Vector2.Normalize(new Vector2(transform.X, transform.Y) - InputManager.GetMousePosition());
+            Vector2 mouseVector = -Vector2.Normalize(transform.Position - InputManager.GetMousePosition());
             
             float rotation = (float) Math.Atan2(mouseVector.Y, mouseVector.X);
 
@@ -100,8 +98,10 @@ namespace MonoGameWindowsStarter.Entities
             Physics bulletPhys = bullet.GetComponent<Physics>();
             Vector2 velocity = mouseVector * bulletSpeed;
 
-            bulletPos.X = transform.X + transform.Width/2;
-            bulletPos.Y = transform.Y + transform.Height/2;
+            //bulletPos.Position.X = transform.Position.X + transform.Width/2;
+            //bulletPos.Position.Y = transform.Position.Y + transform.Height/2;
+            bulletPos.Position = transform.Position + transform.Scale/2;
+
             bulletPos.Rotation = rotation;
 
             bulletPhys.Velocity.X = velocity.X;

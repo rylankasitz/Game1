@@ -33,10 +33,8 @@ namespace MonoGameWindowsStarter.Entities
             BoxCollision boxCollision = AddComponent<BoxCollision>();
 
             transform.Name = "Enemy";
-            transform.X = x;
-            transform.Y = y;
-            transform.Height = h;
-            transform.Width = w;
+            transform.Position = new Vector(x, y);
+            transform.Scale = new Vector(w, h);
 
             sprite.ContentName = "PixelWhite";
             sprite.Color = Color.Blue;

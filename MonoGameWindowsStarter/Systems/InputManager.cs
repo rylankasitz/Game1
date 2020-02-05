@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGameWindowsStarter.Componets;
 
 namespace MonoGameWindowsStarter.Systems
 {
@@ -34,9 +35,9 @@ namespace MonoGameWindowsStarter.Systems
             return Mouse.GetState().LeftButton == ButtonState.Pressed; 
         }
 
-        public static Vector2 GetMousePosition()
+        public static Vector GetMousePosition()
         {
-            return new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            return new Vector(Mouse.GetState().X, Mouse.GetState().Y);
         }
     }
 }

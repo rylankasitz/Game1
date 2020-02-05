@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 
@@ -30,8 +31,7 @@ namespace MonoGameWindowsStarter.Systems
                 Transform transform = entity.GetComponent<Transform>();
                 Physics physics = entity.GetComponent<Physics>();
 
-                transform.X += (int) physics.Velocity.X;
-                transform.Y += (int) physics.Velocity.Y;
+                transform.Position += physics.Velocity;
             }
         }
 

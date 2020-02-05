@@ -53,7 +53,8 @@ namespace MonoGameWindowsStarter.Systems
                 Transform transform = entity.GetComponent<Transform>();
                 Sprite sprite = entity.GetComponent<Sprite>();
 
-                spriteBatch.Draw(sprite.Texture, new Rectangle(transform.X, transform.Y, transform.Width, transform.Height),
+                spriteBatch.Draw(sprite.Texture, 
+                    new Rectangle((int) transform.Position.X, (int) transform.Position.Y, (int) transform.Scale.X, (int) transform.Scale.Y),
                     sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
                     SpriteEffects.None, 1f);  
             }

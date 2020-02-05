@@ -1,4 +1,5 @@
-﻿using MonoGameWindowsStarter.Componets;
+﻿using Microsoft.Xna.Framework;
+using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace MonoGameWindowsStarter.Systems
 {
     public class CollisionHandler : ECSCore.System
     {
-        private int x1, x2, y1, y2, w1, w2, h1, h2;
+        private Vector p1, p2, s1, s2;
 
         public override List<Type> Components {
             get => new List<Type>()
@@ -38,48 +39,44 @@ namespace MonoGameWindowsStarter.Systems
         private bool checkCollision(BoxCollision collider1, BoxCollision collider2, 
             Transform transform1, Transform transform2)
         {
-            x1 = collider1.X + transform1.X;
-            x2 = collider2.X + transform2.X;
-            y1 = collider1.Y + transform1.Y;
-            y2 = collider2.Y + transform2.Y;
-            w1 = collider1.Width * transform1.Width;
-            w2 = collider2.Width * transform2.Width;
-            h1 = collider1.Height * transform1.Height;
-            h2 = collider2.Height * transform2.Height;
+            p1 = collider1.Position + transform1.Position;
+            p2 = collider2.Position + transform2.Position;
+            s1 = collider1.Scale + transform1.Scale;
+            s2 = collider2.Scale + transform2.Scale;
 
-            return (x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2);
+            return (p1.X < p2.X + s2.X && p1.X + s1.X > p2.X && p1.Y < p2.Y + s2.Y && p1.Y + s1.Y > p2.Y);
         }
 
-        private void handlePhysics(Entity entity, Transform transform, int x, int y, int w, int h)
+        private void handlePhysics(Entity entity, Transform transform, Vector p, Vector s)
         {
             if (entity.HasComponent<Physics>())
             {
                 Physics physics = entity.GetComponent<Physics>();
 
-                if (transform.Y + transform.Height - physics.Velocity.Y > y && 
-                    transform.Y - physics.Velocity.Y < y + h) {
+                if (transform.Position.Y + transform.Scale.Y - physics.Velocity.Y > p.Y && 
+                    transform.Position.Y - physics.Velocity.Y < p.Y + s.Y) {
 
                     if (physics.Velocity.X > 0)
                     {
-                        transform.X = x - transform.Width;
+                        transform.Position.X = p.X - transform.Scale.Y;
                     }
                     else if (physics.Velocity.X < 0)
                     {
-                        transform.X = x + w;
+                        transform.Position.X = p.X + s.X;
                     }
                 }
 
-                if (transform.X + transform.Width - physics.Velocity.X > x && 
-                    transform.X - physics.Velocity.X < x + w)
+                if (transform.Position.X + transform.Scale.Y - physics.Velocity.X > p.X && 
+                    transform.Position.X - physics.Velocity.X < p.X + s.X)
                 {
 
                     if (physics.Velocity.Y > 0)
                     {
-                        transform.Y = y - transform.Height;
+                        transform.Position.Y = p.Y - transform.Scale.Y;
                     }
                     else if (physics.Velocity.Y < 0)
                     {
-                        transform.Y = y + h;
+                        transform.Position.Y = p.Y + s.Y;
                     }
                 }
             }
@@ -104,8 +101,8 @@ namespace MonoGameWindowsStarter.Systems
 
                         if (!collider1.TriggerOnly && !collider2.TriggerOnly)
                         {
-                            handlePhysics(Entities[i], transform1, x2, y2, w2, h2);
-                            handlePhysics(Entities[j], transform2, x1, y1, w1, h1);
+                            handlePhysics(Entities[i], transform1, p2, s2);
+                            handlePhysics(Entities[j], transform2, p1, s1);
                         }
                     }
                 }

@@ -11,10 +11,18 @@ namespace MonoGameWindowsStarter.Componets
 {
     public delegate void HandleCollision(BoxCollision collider);
 
-    public class Velocity
+    public class Vector
     {
+        public Vector(float x, float y) { X = x; Y = y; }
         public float X { get; set; } = 0;
         public float Y { get; set; } = 0;
+
+        public static implicit operator Vector2(Vector v) => new Vector2(v.X, v.Y);
+        //public static implicit operator Vector(Vector2 v) => new Vector(v.X, v.Y);
+
+        public static Vector operator +(Vector a, Vector b) => new Vector(a.X + b.X, a.Y + b.Y);
+        public static Vector operator -(Vector a, Vector b) => new Vector(a.X - b.X, a.Y - b.Y);
+        public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
     }
 
     public class Sprite : Component
@@ -28,24 +36,20 @@ namespace MonoGameWindowsStarter.Componets
     public class Transform : Component
     {
         public string Name { get; set; } = "Unnamed";
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
-        public int Width { get; set; } = 100;
-        public int Height { get; set; } = 100;
+        public Vector Position { get; set; } = new Vector(0, 0);
+        public Vector Scale { get; set; } = new Vector(100, 100);
         public float Rotation { get; set; } = 0;
     }
 
     public class Physics : Component
     {
-        public Velocity Velocity { get; set; } = new Velocity();
+        public Vector Velocity { get; set; } = new Vector(0, 0);
     }
 
     public class BoxCollision : Component
     {
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
-        public int Width { get; set; } = 1;
-        public int Height { get; set; } = 1;
+        public Vector Position { get; set; } = new Vector(0, 0);
+        public Vector Scale { get; set; } = new Vector(1, 1);
         public HandleCollision HandleCollision { get; set; }
         public Transform Transform { get; set; }
         public bool TriggerOnly { get; set; } = false;

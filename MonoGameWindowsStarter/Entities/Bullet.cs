@@ -27,8 +27,7 @@ namespace MonoGameWindowsStarter.Entities
             sprite.SpriteLocation = new Rectangle(249, 9, 18, 9);
 
             transform.Name = "Bullet";
-            transform.Width = 18;
-            transform.Height = 9;
+            transform.Scale = new Vector(18, 9);
 
             boxCollision.HandleCollision = handleCollision;
             boxCollision.TriggerOnly = true;
