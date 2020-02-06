@@ -12,35 +12,37 @@ namespace MonoGameWindowsStarter.Entities
     public class Enemy : Entity
     {
         private float flashSpeed = .1f;
-        private int heath = 100;
+        private int size = 20;
 
-        private int x, y, w, h;
+        private int health;
+        private int x, y;
         private Sprite sprite;
         private float currentFlashSpeed;
+        private Transform transform;
 
-        public Enemy(int x, int y, int w, int h)
+        public Enemy(int x, int y, int health)
         {
             this.x = x;
             this.y = y;
-            this.h = h;
-            this.w = w;
+            this.health = health;
         }
 
         public override void Initialize()
         {
             sprite = AddComponent<Sprite>();
-            Transform transform = AddComponent<Transform>();
+            transform = AddComponent<Transform>();
             BoxCollision boxCollision = AddComponent<BoxCollision>();
 
             transform.Name = "Enemy";
             transform.Position = new Vector(x, y);
-            transform.Scale = new Vector(w, h);
+            transform.Scale = new Vector(size, size) *health;
 
             sprite.ContentName = "PixelWhite";
             sprite.Color = Color.Blue;
             sprite.SpriteLocation = new Rectangle(0,0,1,1);
 
             boxCollision.HandleCollision = handleCollision;
+            boxCollision.TriggerOnly = true;
 
             currentFlashSpeed = flashSpeed;
         }
@@ -64,10 +66,17 @@ namespace MonoGameWindowsStarter.Entities
             if (collider.Transform.Name == "Bullet")
             {    
                 currentFlashSpeed = 0f;
-                heath -= 20;
+                health--;
+                transform.Scale -= new Vector(size, size);
+                transform.Position += new Vector(size, size)/2;
             }
 
-            if (heath <= 0)
+            if (collider.Transform.Name == "StaticObject")
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(this);
+            }
+
+            if (health <= 0)
             {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
             }

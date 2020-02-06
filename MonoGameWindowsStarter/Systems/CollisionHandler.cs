@@ -58,7 +58,7 @@ namespace MonoGameWindowsStarter.Systems
 
                     if (physics.Velocity.X > 0)
                     {
-                        transform.Position.X = p.X - transform.Scale.Y;
+                        transform.Position.X = p.X - transform.Scale.X;
                     }
                     else if (physics.Velocity.X < 0)
                     {
@@ -66,7 +66,7 @@ namespace MonoGameWindowsStarter.Systems
                     }
                 }
 
-                if (transform.Position.X + transform.Scale.Y - physics.Velocity.X > p.X && 
+                if (transform.Position.X + transform.Scale.X - physics.Velocity.X > p.X && 
                     transform.Position.X - physics.Velocity.X < p.X + s.X)
                 {
 

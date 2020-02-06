@@ -98,8 +98,6 @@ namespace MonoGameWindowsStarter.Entities
             Physics bulletPhys = bullet.GetComponent<Physics>();
             Vector2 velocity = mouseVector * bulletSpeed;
 
-            //bulletPos.Position.X = transform.Position.X + transform.Width/2;
-            //bulletPos.Position.Y = transform.Position.Y + transform.Height/2;
             bulletPos.Position = transform.Position + transform.Scale/2;
 
             bulletPos.Rotation = rotation;

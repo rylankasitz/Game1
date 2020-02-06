@@ -14,8 +14,8 @@ namespace MonoGameWindowsStarter.Scenes
     public class MainScene : Scene
     {
 
-        private float enemySpawnTime = 2f;
-        private int spawnBuffer = 20;
+        private float enemySpawnTime = 1.5f;
+        private int spawnBuffer = 40;
         private int wallWidth = 50;
 
         private float currentEnemySpawnTime;
@@ -39,6 +39,7 @@ namespace MonoGameWindowsStarter.Scenes
             Entities.Add(new StaticObject(0, 0, wallWidth, game.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
             Entities.Add(new StaticObject(0, game.WindowHeight - wallWidth, game.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
             Entities.Add(new StaticObject(0, 0, game.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            Entities.Add(new StaticObject(game.WindowWidth / 2 - 50, game.WindowHeight / 2 - 50, 100, 100, "PixelWhite", new Rectangle(0, 0, 1, 1)));
         }
 
         public override void Update(GameTime gameTime)
@@ -49,7 +50,7 @@ namespace MonoGameWindowsStarter.Scenes
             {
                 AddEntity(new Enemy(r.Next(wallWidth + spawnBuffer, game.WindowWidth - wallWidth - spawnBuffer),
                                        r.Next(wallWidth + spawnBuffer, game.WindowHeight - wallWidth - spawnBuffer),
-                                       20, 20));
+                                       r.Next(1, 4)));
                 currentEnemySpawnTime = 0;
             }
         }

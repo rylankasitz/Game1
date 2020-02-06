@@ -18,10 +18,11 @@ namespace MonoGameWindowsStarter.Componets
         public float Y { get; set; } = 0;
 
         public static implicit operator Vector2(Vector v) => new Vector2(v.X, v.Y);
-        //public static implicit operator Vector(Vector2 v) => new Vector(v.X, v.Y);
 
         public static Vector operator +(Vector a, Vector b) => new Vector(a.X + b.X, a.Y + b.Y);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.X - b.X, a.Y - b.Y);
+
+        public static Vector operator *(Vector v, float n) => new Vector(v.X * n, v.Y * n);
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
     }
 
