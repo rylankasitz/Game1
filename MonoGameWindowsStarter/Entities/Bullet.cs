@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Entities
 {
@@ -37,9 +38,9 @@ namespace MonoGameWindowsStarter.Entities
         {
         }
 
-        private void handleCollision(BoxCollision collider)
+        private void handleCollision(Entity collider)
         {
-            if (collider.Transform.Name == "StaticObject" || collider.Transform.Name == "Enemy")
+            if (collider.GetComponent<Transform>().Name == "StaticObject" || collider.GetComponent<Transform>().Name == "Enemy")
             {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
             }

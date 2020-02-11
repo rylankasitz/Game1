@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameWindowsStarter.Componets;
@@ -24,6 +25,7 @@ namespace MonoGameWindowsStarter
         private Renderer renderer;
         private CollisionHandler collisionHandler;
         private PhysicsHandler physicsHandler;
+        private AnimationHandler animationHandler;
 
         public GameManager()
         {
@@ -33,7 +35,8 @@ namespace MonoGameWindowsStarter
             // Systems
             systems.Add(renderer = new Renderer());
             systems.Add(collisionHandler = new CollisionHandler());
-            systems.Add(physicsHandler = new PhysicsHandler());    
+            systems.Add(physicsHandler = new PhysicsHandler());
+            systems.Add(animationHandler = new AnimationHandler(Content));
         }
 
         protected override void Initialize()
@@ -74,6 +77,7 @@ namespace MonoGameWindowsStarter
 
             physicsHandler.HandlePhysics();
             collisionHandler.CheckCollisions();
+            animationHandler.UpdateAnimations(gameTime);
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
 

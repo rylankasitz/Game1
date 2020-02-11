@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using MonoGameWindowsStarter.Systems;
+using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Entities
 {
@@ -19,6 +20,7 @@ namespace MonoGameWindowsStarter.Entities
         private Transform transform;
         private BoxCollision boxCollision;
         private Physics physics;
+        private Animation animations;
 
         private int speed = 5;
         private float fireRate = .3f;
@@ -32,14 +34,16 @@ namespace MonoGameWindowsStarter.Entities
             transform = AddComponent<Transform>();
             boxCollision = AddComponent<BoxCollision>();
             physics = AddComponent<Physics>();
+            animations = AddComponent<Animation>();
+
+            animations.AnimationFile = "Player";
+            animations.CurrentAnimation = "idle";
 
             sprite.ContentName = "CharacterSpriteSheet";
             sprite.SpriteLocation = new Rectangle(17, 397, 30, 49);
 
             transform.Position = new Vector(100, 100);
-            transform.Scale = new Vector(37, 54);
-
-            boxCollision.HandleCollision = handleCollision;
+            transform.Scale = new Vector(37, 54);       
 
             timeSinceShot = fireRate;       
         }
@@ -55,11 +59,6 @@ namespace MonoGameWindowsStarter.Entities
                 fire();
                 timeSinceShot = 0;
             }
-        }
-
-        private void handleCollision(BoxCollision collider)
-        {
-            // Handle Collision
         }
 
         private void move()

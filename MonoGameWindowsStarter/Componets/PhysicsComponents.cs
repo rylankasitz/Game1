@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Componets
 {
-    public delegate void HandleCollision(BoxCollision collider);
+    public delegate void HandleCollision(Entity collider);
 
     public class Vector
     {
@@ -24,14 +24,6 @@ namespace MonoGameWindowsStarter.Componets
 
         public static Vector operator *(Vector v, float n) => new Vector(v.X * n, v.Y * n);
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
-    }
-
-    public class Sprite : Component
-    {
-        public string ContentName { get; set; } = "test";
-        public Texture2D Texture { get; set; }
-        public Rectangle SpriteLocation { get; set; }
-        public Color Color { get; set; } = Color.White;
     }
 
     public class Transform : Component

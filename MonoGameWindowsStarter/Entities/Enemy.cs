@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Entities
 {
@@ -61,9 +62,9 @@ namespace MonoGameWindowsStarter.Entities
             }
         }
 
-        private void handleCollision(BoxCollision collider)
+        private void handleCollision(Entity collider)
         {
-            if (collider.Transform.Name == "Bullet")
+            if (collider.GetComponent<Transform>().Name == "Bullet")
             {    
                 currentFlashSpeed = 0f;
                 health--;
@@ -71,7 +72,7 @@ namespace MonoGameWindowsStarter.Entities
                 transform.Position += new Vector(size, size)/2;
             }
 
-            if (collider.Transform.Name == "StaticObject")
+            if (collider.GetComponent<Transform>().Name == "StaticObject")
             {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
             }

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using Microsoft.Xna.Framework.Input;
+using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Systems
 {

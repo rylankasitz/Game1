@@ -96,8 +96,8 @@ namespace MonoGameWindowsStarter.Systems
 
                     if (checkCollision(collider1, collider2, transform1, transform2))
                     {
-                        collider1.HandleCollision?.Invoke(collider2);
-                        collider2.HandleCollision?.Invoke(collider1);
+                        collider1.HandleCollision?.Invoke(Entities[j]);
+                        collider2.HandleCollision?.Invoke(Entities[i]);
 
                         if (!collider1.TriggerOnly && !collider2.TriggerOnly)
                         {

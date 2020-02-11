@@ -13,6 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin AnimationData/Player.json
+/copy:AnimationData/Player.json
+
 #begin download.png
 /importer:TextureImporter
 /processor:TextureProcessor
