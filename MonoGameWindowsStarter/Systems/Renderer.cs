@@ -17,13 +17,10 @@ namespace MonoGameWindowsStarter.Systems
     {
         private ContentManager contentManager;
 
-        public override List<Type> Components
+        public override bool SetSystemRequirments(Entity entity)
         {
-            get => new List<Type>()
-            {
-                typeof(Sprite),
-                typeof(Transform)
-            };
+            return entity.HasComponent<Sprite>() &&
+                   entity.HasComponent<Transform>();
         }
 
         public override void Initialize() { }

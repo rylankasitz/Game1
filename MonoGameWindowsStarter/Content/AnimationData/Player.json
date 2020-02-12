@@ -1,27 +1,92 @@
 ﻿{
 	"Animations": [
 		{		
-			"Name": "test",
-			"Frames": [
-				{
-					"Duration": .25,
-					"SourceRectangle": {
-						"X": 17,
-						"Y": 397,
-						"Width": 30,
-						"Height": 49
-					}
-				},
-				{
-					"Duration": .25,
-					"SourceRectangle": {
-						"X": 82,
-						"Y": 397,
-						"Width": 30,
-						"Height": 49
-					}
-				}
-			]		
+			"Name": "WalkUp",
+			"FrameCount": 8, 
+			"FrameDuration": .1,
+			"StartX": 81,
+			"StartY": 525, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "IdleUp",
+			"FrameCount": 1, 
+			"FrameDuration": .1,
+			"StartX": 17,
+			"StartY": 525, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "WalkDown",
+			"FrameCount": 8, 
+			"FrameDuration": .1,
+			"StartX": 81,
+			"StartY": 653, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "IdleDown",
+			"FrameCount": 1, 
+			"FrameDuration": .1,
+			"StartX": 17,
+			"StartY": 653, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "WalkLeft",
+			"FrameCount": 8, 
+			"FrameDuration": .1,
+			"StartX": 81,
+			"StartY": 590, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "IdleLeft",
+			"FrameCount": 1, 
+			"FrameDuration": .1,
+			"StartX": 17,
+			"StartY": 590, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "WalkRight",
+			"FrameCount": 8, 
+			"FrameDuration": .1,
+			"StartX": 81,
+			"StartY": 718, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
+		},
+		{		
+			"Name": "IdleRight",
+			"FrameCount": 1, 
+			"FrameDuration": .1,
+			"StartX": 17,
+			"StartY": 718, 
+			"IncrementX": 64, 
+			"IncrementY": 0, 
+			"Width": 30, 
+			"Height": 49		
 		}
 	]
 }

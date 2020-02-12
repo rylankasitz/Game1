@@ -24,7 +24,7 @@ namespace MonoGameWindowsStarter.ECSCore
 
             foreach (System system in systems)
             {
-                system.AddEntity(entity, matcher);
+                system.AddEntity(entity);
             }
 
             Entities.Add(entity);

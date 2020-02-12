@@ -28,6 +28,13 @@
 /processorParam:TextureFormat=Color
 /build:download.png;CharacterSpriteSheet.png
 
+#begin Fonts/File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/File.spritefont;Fonts/BaseFont.spritefont
+
 #begin M484BulletCollection1.png
 /importer:TextureImporter
 /processor:TextureProcessor

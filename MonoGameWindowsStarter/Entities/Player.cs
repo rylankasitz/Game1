@@ -37,10 +37,10 @@ namespace MonoGameWindowsStarter.Entities
             animations = AddComponent<Animation>();
 
             animations.AnimationFile = "Player";
-            animations.CurrentAnimation = "idle";
+            animations.CurrentAnimation = "WalkUp";
 
             sprite.ContentName = "CharacterSpriteSheet";
-            sprite.SpriteLocation = new Rectangle(17, 397, 30, 49);
+            sprite.SpriteLocation = new Rectangle(0, 0, 30, 52);
 
             transform.Position = new Vector(100, 100);
             transform.Scale = new Vector(37, 54);       
@@ -69,18 +69,33 @@ namespace MonoGameWindowsStarter.Entities
             if (InputManager.KeyPressed(Keys.W))
             {
                 physics.Velocity.Y = -speed;
+                animations.CurrentAnimation = "WalkUp";
             }
             if (InputManager.KeyPressed(Keys.S))
             {
                 physics.Velocity.Y = speed;
+                animations.CurrentAnimation = "WalkDown";
             }
             if (InputManager.KeyPressed(Keys.A))
             {
                 physics.Velocity.X = -speed;
+                animations.CurrentAnimation = "WalkLeft";
             }
             if (InputManager.KeyPressed(Keys.D))
             {
                 physics.Velocity.X = speed;
+                animations.CurrentAnimation = "WalkRight";
+            }
+
+            // Change
+            if (physics.Velocity.X != 0 && physics.Velocity.Y != 0)
+            {
+                physics.Velocity = new Vector(physics.Velocity.X / speed, physics.Velocity.Y / speed) * speed;
+            }
+
+            if (physics.Velocity.X == 0 && physics.Velocity.Y == 0)
+            {
+                animations.CurrentAnimation = (animations.CurrentAnimation.Replace("Walk", "Idle"));
             }
         }
 

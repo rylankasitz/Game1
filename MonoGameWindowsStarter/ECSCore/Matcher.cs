@@ -15,12 +15,12 @@ namespace MonoGameWindowsStarter.ECSCore
             allEntities = entityPool;
         }
 
-        public List<Entity> Match(List<Type> types)
+        public List<Entity> Match(ComponentsFunc Compoents)
         {
             List<Entity> matchedEntities = new List<Entity>();
             foreach (Entity entity in allEntities)
             {
-                if (MatchEntity(types, entity)) matchedEntities.Add(entity);
+                if (Compoents(entity)) matchedEntities.Add(entity);
             }
 
             return matchedEntities;

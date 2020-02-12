@@ -18,14 +18,11 @@ namespace MonoGameWindowsStarter.Systems
         private Dictionary<string, AnimationData> animationData = new Dictionary<string, AnimationData>();
         private ContentManager content;
 
-        public override List<Type> Components
+        public override bool SetSystemRequirments(Entity entity)
         {
-            get => new List<Type>()
-            {
-                typeof(Sprite),
-                typeof(Transform),
-                typeof(Animation)
-            };
+            return entity.HasComponent<Sprite>() &&
+                   entity.HasComponent<Transform>() &&
+                   entity.HasComponent<Animation>();
         }
 
         public AnimationHandler(ContentManager contentManager)
@@ -53,10 +50,12 @@ namespace MonoGameWindowsStarter.Systems
                 AnimationTracker current = getAnimation(animation.CurrentAnimation, animationData[animation.AnimationFile + ".json"]);
                 Sprite sprite = entity.GetComponent<Sprite>();
 
-                double secondsIntoAnimation = current.TotalTime.TotalSeconds + gameTime.ElapsedGameTime.TotalSeconds;
-                double remainder = secondsIntoAnimation % current.Duration.TotalSeconds;
+                current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
 
-                current.TotalTime = TimeSpan.FromSeconds(remainder);
+                if (current.TimeIntoAnimation > current.Duration)
+                    current.TimeIntoAnimation = 0;
+
+                current.FrameNumber = (int) Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
 
                 sprite.SpriteLocation = current.CurrentFrame;
             }
@@ -75,22 +74,18 @@ namespace MonoGameWindowsStarter.Systems
 
     public class AnimationTracker
     {
-        public List<AnimationFrame> Frames { get; } = new List<AnimationFrame>();
+        public int FrameCount, StartX, StartY, IncrementX, IncrementY, Width, Height;
+        public float FrameDuration;
         public string Name;
 
-        public TimeSpan TotalTime;
+        public int FrameNumber;
+        public double TimeIntoAnimation;
 
-        public TimeSpan Duration
+        public float Duration
         {
             get
             {
-                double totalSeconds = 0;
-                foreach (var frame in Frames)
-                {
-                    totalSeconds += TimeSpan.FromSeconds(frame.Duration).TotalSeconds;
-                }
-
-                return TimeSpan.FromSeconds(totalSeconds);
+                return FrameDuration * FrameCount;
             }
         }
 
@@ -98,54 +93,9 @@ namespace MonoGameWindowsStarter.Systems
         {
             get
             {
-                AnimationFrame currentFrame = null;
-                TimeSpan accumulatedTime = new TimeSpan();
-
-                foreach (var frame in Frames)
-                {
-                    if (accumulatedTime + TimeSpan.FromSeconds(frame.Duration) >= TotalTime)
-                    {
-                        currentFrame = frame;
-                        break;
-                    }
-                    else
-                    {
-                        accumulatedTime += TimeSpan.FromSeconds(frame.Duration);
-                    }
-                }
-
-                if (currentFrame == null)
-                {
-                    currentFrame = Frames.LastOrDefault();
-                }
-
-                if (currentFrame != null)
-                {
-                    return currentFrame.SourceRectangle;
-                }
-                else
-                {
-                    return Rectangle.Empty;
-                }
+                return new Rectangle(StartX + IncrementX * FrameNumber, StartY + IncrementY * FrameNumber, Width, Height);
             }
         }
-
-        /*public void AddFrame(Rectangle bounds, TimeSpan duration)
-        {
-            AnimationFrame frame = new AnimationFrame()
-            {
-                SourceRectangle = bounds,
-                Duration = duration
-            };
-
-            Frames.Add(frame);
-        }*/
-    }
-
-    public class AnimationFrame
-    {
-        public Rectangle SourceRectangle { get; set; }
-        public float Duration { get; set; }
     }
 
     public class AnimationData

@@ -13,12 +13,10 @@ namespace MonoGameWindowsStarter.Systems
     {
         private Vector p1, p2, s1, s2;
 
-        public override List<Type> Components {
-            get => new List<Type>()
-            {
-                typeof(BoxCollision),
-                typeof(Transform)
-            };
+        public override bool SetSystemRequirments(Entity entity)
+        {
+            return entity.HasComponent<BoxCollision>() &&
+                   entity.HasComponent<Transform>();
         }
 
         public override void Initialize()

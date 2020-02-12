@@ -11,13 +11,10 @@ namespace MonoGameWindowsStarter.Systems
 {
     public class PhysicsHandler : ECSCore.System
     {
-        public override List<Type> Components
+        public override bool SetSystemRequirments(Entity entity)
         {
-            get => new List<Type>()
-            {
-                typeof(Physics),
-                typeof(Transform)
-            };
+            return entity.HasComponent<Physics>() &&
+                   entity.HasComponent<Transform>();
         }
 
         public override void Initialize() { }

@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.ECSCore
 {
+    public delegate bool ComponentsFunc(Entity entity);
+
     public abstract class System
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
-        public abstract List<Type> Components { get; }
+        //public abstract List<Type> Components { get; }
+
+        private ComponentsFunc Components;
 
         public void LoadEntities(Matcher matcher)
         {
+            Components = SetSystemRequirments;
             Entities = matcher.Match(Components);
         }
 
-        public void AddEntity(Entity entity, Matcher matcher)
+        public void AddEntity(Entity entity)
         {
-            if (matcher.MatchEntity(Components, entity))
+            if (Components(entity))
             {
                 InitializeEntity(entity);
                 Entities.Add(entity);
@@ -32,5 +37,6 @@ namespace MonoGameWindowsStarter.ECSCore
 
         public abstract void InitializeEntity(Entity entity);
         public abstract void Initialize();
+        public abstract bool SetSystemRequirments(Entity entity);
     }
 }
