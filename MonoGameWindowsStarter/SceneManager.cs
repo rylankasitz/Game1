@@ -14,12 +14,15 @@ namespace MonoGameWindowsStarter
         public static List<ECSCore.System> systems { get; set; }
 
         private static Scene currentScene;
-        private static List<Scene> scenes = new List<Scene>();  
+        private static List<Scene> scenes = new List<Scene>();
+        private static GameManager gameManager;
 
         public static void Initialize(GameManager game)
         {
+            gameManager = game;
+
             // Add all scenes here
-            scenes.Add(new MainScene(game));
+            scenes.Add(new MainScene());
         }
 
         public static Scene GetCurrentScene()
@@ -27,24 +30,25 @@ namespace MonoGameWindowsStarter
             return currentScene;
         }
 
-        public static void SetScene(string name)
+        public static void LoadScene(string name)
         {
-            foreach(Scene scene in scenes)
-            {
-                if (scene.Name == name)
-                    currentScene = scene;
-            }
-        }
-
-        public static void LoadScene()
-        {
-            currentScene.LoadScene(systems);
+            findScene(name);
+            currentScene.LoadScene(systems, gameManager);
         }
 
         public static void UpdateScene(GameTime gameTime)
         {
             currentScene.UpdateScene(gameTime);
             currentScene.Update(gameTime);
+        }
+
+        private static void findScene(string name)
+        {
+            foreach (Scene scene in scenes)
+            {
+                if (scene.Name == name)
+                    currentScene = scene;
+            }
         }
     }
 }

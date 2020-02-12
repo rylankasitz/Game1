@@ -13,33 +13,30 @@ namespace MonoGameWindowsStarter.Scenes
 {
     public class MainScene : Scene
     {
-
         private float enemySpawnTime = 1.5f;
         private int spawnBuffer = 40;
         private int wallWidth = 50;
 
         private float currentEnemySpawnTime;
         private Random r = new Random();
-        private GameManager game;
 
-        public MainScene(GameManager game)
+        public MainScene() { Name = "testScene"; }
+
+        public override void Initialize()
         {
-            this.game = game;
-
-            game.IsMouseVisible = true;          
-
-            Name = "testScene";
+            GameManager.IsMouseVisible = true;          
 
             currentEnemySpawnTime = enemySpawnTime;
 
-            Entities.Add(new Player());    
+            AddEntity(new Player());
+            AddEntity(new HUD());
 
             // Map (temporary will use map editor later)
-            Entities.Add(new StaticObject(game.WindowWidth - wallWidth, 0, wallWidth, game.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            Entities.Add(new StaticObject(0, 0, wallWidth, game.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            Entities.Add(new StaticObject(0, game.WindowHeight - wallWidth, game.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            Entities.Add(new StaticObject(0, 0, game.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            Entities.Add(new StaticObject(game.WindowWidth / 2 - 50, game.WindowHeight / 2 - 50, 100, 100, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            AddEntity(new StaticObject(GameManager.WindowWidth - wallWidth, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            AddEntity(new StaticObject(0, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            AddEntity(new StaticObject(0, GameManager.WindowHeight - wallWidth, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            AddEntity(new StaticObject(0, 0, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            AddEntity(new StaticObject(GameManager.WindowWidth / 2 - 50, GameManager.WindowHeight / 2 - 50, 100, 100, "PixelWhite", new Rectangle(0, 0, 1, 1)));
         }
 
         public override void Update(GameTime gameTime)
@@ -48,8 +45,8 @@ namespace MonoGameWindowsStarter.Scenes
 
             if (currentEnemySpawnTime > enemySpawnTime)
             {
-                AddEntity(new Enemy(r.Next(wallWidth + spawnBuffer, game.WindowWidth - wallWidth - spawnBuffer),
-                                       r.Next(wallWidth + spawnBuffer, game.WindowHeight - wallWidth - spawnBuffer),
+                AddEntity(new Enemy(r.Next(wallWidth + spawnBuffer, GameManager.WindowWidth - wallWidth - spawnBuffer),
+                                       r.Next(wallWidth + spawnBuffer, GameManager.WindowHeight - wallWidth - spawnBuffer),
                                        r.Next(1, 4)));
                 currentEnemySpawnTime = 0;
             }

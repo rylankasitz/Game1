@@ -10,12 +10,14 @@ namespace MonoGameWindowsStarter.ECSCore
     public abstract class Scene
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
+        public GameManager GameManager { get; set; }
 
         public string Name { get; set; } = "Unamed Scene";
 
         private Matcher matcher;
         private List<System> systems;
 
+        public abstract void Initialize();
         public abstract void Update(GameTime gameTime);
 
         public void AddEntity(Entity entity)
@@ -24,7 +26,8 @@ namespace MonoGameWindowsStarter.ECSCore
 
             foreach (System system in systems)
             {
-                system.AddEntity(entity);
+                if (system.Loaded)
+                    system.AddEntity(entity);
             }
 
             Entities.Add(entity);
@@ -40,15 +43,18 @@ namespace MonoGameWindowsStarter.ECSCore
             Entities.Remove(entity);
         }
 
-        public void LoadScene(List<System> systems)
+        public void LoadScene(List<System> systems, GameManager game)
         {
             this.systems = systems;
+            GameManager = game;
+
+            Initialize();
 
             matcher = new Matcher(Entities);
 
-            foreach (Entity entity in Entities)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                entity.Initialize();
+                Entities[i].Initialize();
             }
 
             foreach (System system in systems)

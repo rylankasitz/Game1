@@ -11,7 +11,7 @@ namespace MonoGameWindowsStarter.ECSCore
     public abstract class System
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
-        //public abstract List<Type> Components { get; }
+        public bool Loaded = false;
 
         private ComponentsFunc Components;
 
@@ -19,6 +19,7 @@ namespace MonoGameWindowsStarter.ECSCore
         {
             Components = SetSystemRequirments;
             Entities = matcher.Match(Components);
+            Loaded = true;
         }
 
         public void AddEntity(Entity entity)

@@ -64,6 +64,7 @@
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\StaticObject.cs" />
+    <Compile Include="Entities\HUD.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Program.cs" />

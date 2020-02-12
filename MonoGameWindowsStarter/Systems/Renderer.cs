@@ -16,10 +16,11 @@ namespace MonoGameWindowsStarter.Systems
     public class Renderer : ECSCore.System 
     {
         private ContentManager contentManager;
+        private SpriteFont font;
 
         public override bool SetSystemRequirments(Entity entity)
         {
-            return entity.HasComponent<Sprite>() &&
+            return (entity.HasComponent<Sprite>() || entity.HasComponent<TextDraw>()) &&
                    entity.HasComponent<Transform>();
         }
 
@@ -27,14 +28,19 @@ namespace MonoGameWindowsStarter.Systems
 
         public override void InitializeEntity(Entity entity)
         {
-            Sprite sprite = entity.GetComponent<Sprite>();
-            sprite.Texture = contentManager.Load<Texture2D>(sprite.ContentName);
+            if (entity.HasComponent<Sprite>())
+            {
+                Sprite sprite = entity.GetComponent<Sprite>();
+                sprite.Texture = contentManager.Load<Texture2D>(sprite.ContentName);
+            }
         }
 
         public void LoadContent(ContentManager content)
         {
             contentManager = content;
+            font = contentManager.Load<SpriteFont>("Fonts/BaseFont");
 
+            // Change
             Texture2D tex = content.Load<Texture2D>("MouseTarget");
             Mouse.SetCursor(MouseCursor.FromTexture2D(tex, -12, -12));
 
@@ -49,12 +55,22 @@ namespace MonoGameWindowsStarter.Systems
             foreach (Entity entity in Entities)
             {
                 Transform transform = entity.GetComponent<Transform>();
-                Sprite sprite = entity.GetComponent<Sprite>();
 
-                spriteBatch.Draw(sprite.Texture, 
-                    new Rectangle((int) transform.Position.X, (int) transform.Position.Y, (int) transform.Scale.X, (int) transform.Scale.Y),
-                    sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
-                    SpriteEffects.None, 1f);  
+                if (entity.HasComponent<Sprite>())
+                {
+                    Sprite sprite = entity.GetComponent<Sprite>();
+
+                    spriteBatch.Draw(sprite.Texture,
+                        new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)transform.Scale.X, (int)transform.Scale.Y),
+                        sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
+                        SpriteEffects.None, 1f);
+                }
+                if (entity.HasComponent<TextDraw>())
+                {
+                    TextDraw text = entity.GetComponent<TextDraw>();
+
+                    //spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0,0), transform.Scale, SpriteEffects.None, 0f);
+                }
             }
         }
     }

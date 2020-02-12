@@ -24,7 +24,12 @@ namespace MonoGameWindowsStarter.Componets
         {
             public string CurrentAnimation { get; set; } = string.Empty;
             public string AnimationFile { get; set; } = string.Empty;
+        }
 
+        public class TextDraw : Component
+        {
+            public string Text { get; set; } = "";
+            public Color Color { get; set; } = Color.White;
         }
     }
 }
