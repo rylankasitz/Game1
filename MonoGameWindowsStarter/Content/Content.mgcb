@@ -13,8 +13,23 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin AnimationData/Player.json
-/copy:AnimationData/Player.json
+#begin Audio/Hit 2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Hit 2.wav
+
+#begin Audio/Shoot 1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Shoot 1.wav
+
+#begin Audio/Shoot 3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Shoot 3.wav
 
 #begin download.png
 /importer:TextureImporter
@@ -34,6 +49,9 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/File.spritefont;Fonts/BaseFont.spritefont
+
+#begin GameData/Animations/Player.json
+/copy:GameData/Animations/Player.json
 
 #begin M484BulletCollection1.png
 /importer:TextureImporter

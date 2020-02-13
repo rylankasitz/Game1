@@ -69,7 +69,7 @@ namespace MonoGameWindowsStarter.Systems
                 {
                     TextDraw text = entity.GetComponent<TextDraw>();
 
-                    //spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0,0), transform.Scale, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0,0), transform.Scale, SpriteEffects.None, 0f);
                 }
             }
         }

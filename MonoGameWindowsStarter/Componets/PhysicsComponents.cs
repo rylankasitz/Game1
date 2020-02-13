@@ -28,7 +28,6 @@ namespace MonoGameWindowsStarter.Componets
 
     public class Transform : Component
     {
-        public string Name { get; set; } = "Unnamed";
         public Vector Position { get; set; } = new Vector(0, 0);
         public Vector Scale { get; set; } = new Vector(100, 100);
         public float Rotation { get; set; } = 0;

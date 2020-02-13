@@ -6,6 +6,7 @@ using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using MonoGameWindowsStarter.Entities;
 using MonoGameWindowsStarter.Systems;
+using MonoGameWindowsStarter.Systems.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace MonoGameWindowsStarter
 {
     public class GameManager : Game
     {
-        public int WindowWidth { get; set; } = 1920/2;
-        public int WindowHeight { get; set; } = 1080/2;
+        public int WindowWidth { get; set; } = 1280;
+        public int WindowHeight { get; set; } = 720;
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -57,6 +58,7 @@ namespace MonoGameWindowsStarter
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            AudioManager.LoadContent(Content);
             renderer.LoadContent(Content);
         }
 

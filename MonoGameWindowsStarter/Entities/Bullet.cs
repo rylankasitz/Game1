@@ -19,6 +19,8 @@ namespace MonoGameWindowsStarter.Entities
 
         public override void Initialize()
         {
+            Name = "Bullet";
+
             sprite = AddComponent<Sprite>();
             transform = AddComponent<Transform>();
             boxCollision = AddComponent<BoxCollision>();
@@ -26,21 +28,18 @@ namespace MonoGameWindowsStarter.Entities
 
             sprite.ContentName = "BulletsSpriteSheet";
             sprite.SpriteLocation = new Rectangle(249, 9, 18, 9);
-
-            transform.Name = "Bullet";
+            
             transform.Scale = new Vector(18, 9);
 
             boxCollision.HandleCollision = handleCollision;
             boxCollision.TriggerOnly = true;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-        }
+        public override void Update(GameTime gameTime) { }
 
         private void handleCollision(Entity collider)
         {
-            if (collider.GetComponent<Transform>().Name == "StaticObject" || collider.GetComponent<Transform>().Name == "Enemy")
+            if (collider.Name == "StaticObject" || collider.Name == "Enemy")
             {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
             }

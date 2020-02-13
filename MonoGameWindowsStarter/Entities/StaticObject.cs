@@ -29,11 +29,12 @@ namespace MonoGameWindowsStarter.Entities
 
         public override void Initialize()
         {
+            Name = "StaticObject";
+
             Sprite sprite = AddComponent<Sprite>();
             Transform transform = AddComponent<Transform>();
             BoxCollision boxCollision = AddComponent<BoxCollision>();
 
-            transform.Name = "StaticObject";
             transform.Position = new Vector(x, y);
             transform.Scale = new Vector(w, h);
 

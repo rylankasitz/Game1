@@ -43,6 +43,19 @@ namespace MonoGameWindowsStarter.ECSCore
             Entities.Remove(entity);
         }
 
+        public T GetEntity<T>(string name) where T : Entity, new()
+        {
+            foreach(Entity entity in Entities)
+            {
+                if (entity.Name == name)
+                {
+                    return (T) entity;
+                }
+            }
+
+            return null;
+        }
+
         public void LoadScene(List<System> systems, GameManager game)
         {
             this.systems = systems;

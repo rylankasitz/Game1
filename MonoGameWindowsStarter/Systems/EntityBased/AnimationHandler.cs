@@ -34,7 +34,7 @@ namespace MonoGameWindowsStarter.Systems
         {
             var jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-            foreach (string file in Directory.GetFiles(Path.Combine(content.RootDirectory, "AnimationData")))
+            foreach (string file in Directory.GetFiles(Path.Combine(content.RootDirectory, "GameData\\Animations")))
             {
                 animationData[Path.GetFileName(file)] = JsonConvert.DeserializeObject<AnimationData>(File.ReadAllText(file), jsonSerializerSettings);
             }

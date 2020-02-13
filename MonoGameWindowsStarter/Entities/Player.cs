@@ -10,26 +10,32 @@ using Microsoft.Xna.Framework.Input;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using MonoGameWindowsStarter.Systems;
+using MonoGameWindowsStarter.Systems.Global;
 using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Entities
 {
     class Player : Entity
     {
+        public int Speed = 5;
+        public int Health = 5;
+        public float FireRate = .25f;
+        public float BulletSpeed = 25;
+        public float Score = 0;
+        public bool GameOver = false;
+
         private Sprite sprite;
         private Transform transform;
         private BoxCollision boxCollision;
         private Physics physics;
         private Animation animations;
 
-        private int speed = 5;
-        private float fireRate = .3f;
-        private float bulletSpeed = 10;
-
         private float timeSinceShot;
 
         public override void Initialize()
         {
+            Name = "Player";
+
             sprite = AddComponent<Sprite>();
             transform = AddComponent<Transform>();
             boxCollision = AddComponent<BoxCollision>();
@@ -43,21 +49,43 @@ namespace MonoGameWindowsStarter.Entities
             sprite.SpriteLocation = new Rectangle(0, 0, 30, 52);
 
             transform.Position = new Vector(100, 100);
-            transform.Scale = new Vector(37, 54);       
+            transform.Scale = new Vector(37, 54);
 
-            timeSinceShot = fireRate;       
+            boxCollision.HandleCollision = handleCollision;
+
+            timeSinceShot = FireRate;       
         }
 
         public override void Update(GameTime gameTime)
         {
             move();
 
-            timeSinceShot += (float) gameTime.ElapsedGameTime.TotalSeconds;
+            timeSinceShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (InputManager.LeftMousePressed() && fireRate < timeSinceShot)
+            if (InputManager.LeftMousePressed() && FireRate < timeSinceShot)
             {
                 fire();
                 timeSinceShot = 0;
+            }
+        }
+
+        private void handleCollision(Entity entity)
+        {
+            if (entity.Name == "Enemy" && Health > 0)
+            {
+                Health--;
+
+                AudioManager.Play("Hit 2");
+                SceneManager.GetCurrentScene().RemoveEntity(entity);
+
+                HUD hud = SceneManager.GetCurrentScene().GetEntity<HUD>("HUD");
+                hud.Health[Health].GetComponent<Sprite>().Color = Color.Red;
+
+                if (Health <= 0)
+                {
+                    hud.GameOver.GetComponent<TextDraw>().Text = "GAME OVER\nPress R TO RESTART";
+                    GameOver = true;
+                }
             }
         }
 
@@ -68,29 +96,29 @@ namespace MonoGameWindowsStarter.Entities
 
             if (InputManager.KeyPressed(Keys.W))
             {
-                physics.Velocity.Y = -speed;
+                physics.Velocity.Y = -Speed;
                 animations.CurrentAnimation = "WalkUp";
             }
             if (InputManager.KeyPressed(Keys.S))
             {
-                physics.Velocity.Y = speed;
+                physics.Velocity.Y = Speed;
                 animations.CurrentAnimation = "WalkDown";
             }
             if (InputManager.KeyPressed(Keys.A))
             {
-                physics.Velocity.X = -speed;
+                physics.Velocity.X = -Speed;
                 animations.CurrentAnimation = "WalkLeft";
             }
             if (InputManager.KeyPressed(Keys.D))
             {
-                physics.Velocity.X = speed;
+                physics.Velocity.X = Speed;
                 animations.CurrentAnimation = "WalkRight";
             }
 
             // Change
             if (physics.Velocity.X != 0 && physics.Velocity.Y != 0)
             {
-                physics.Velocity = new Vector(physics.Velocity.X / speed, physics.Velocity.Y / speed) * speed;
+                physics.Velocity = new Vector(physics.Velocity.X / Speed, physics.Velocity.Y / Speed) * Speed;
             }
 
             if (physics.Velocity.X == 0 && physics.Velocity.Y == 0)
@@ -110,7 +138,7 @@ namespace MonoGameWindowsStarter.Entities
 
             Transform bulletPos = bullet.GetComponent<Transform>();
             Physics bulletPhys = bullet.GetComponent<Physics>();
-            Vector2 velocity = mouseVector * bulletSpeed;
+            Vector2 velocity = mouseVector * BulletSpeed;
 
             bulletPos.Position = transform.Position + transform.Scale/2;
 
@@ -118,6 +146,8 @@ namespace MonoGameWindowsStarter.Entities
 
             bulletPhys.Velocity.X = velocity.X;
             bulletPhys.Velocity.Y = velocity.Y;
+
+            AudioManager.Play("Shoot 3");
         }
     }
 }

@@ -12,14 +12,19 @@ namespace MonoGameWindowsStarter.Entities
 {
     public class Enemy : Entity
     {
+        private int size = 40;
         private float flashSpeed = .1f;
-        private int size = 20;
+        public float Speed = 5f;
 
         private int health;
         private int x, y;
-        private Sprite sprite;
         private float currentFlashSpeed;
+
+        private Sprite sprite;
         private Transform transform;
+        private Scene currentScene;
+        private Player player;
+        private HUD hud;
 
         public Enemy(int x, int y, int health)
         {
@@ -30,11 +35,13 @@ namespace MonoGameWindowsStarter.Entities
 
         public override void Initialize()
         {
+            Name = "Enemy";
+
             sprite = AddComponent<Sprite>();
             transform = AddComponent<Transform>();
             BoxCollision boxCollision = AddComponent<BoxCollision>();
-
-            transform.Name = "Enemy";
+            Physics physics = AddComponent<Physics>();
+       
             transform.Position = new Vector(x, y);
             transform.Scale = new Vector(size, size) *health;
 
@@ -46,6 +53,19 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision.TriggerOnly = true;
 
             currentFlashSpeed = flashSpeed;
+
+            currentScene = SceneManager.GetCurrentScene();
+            player = currentScene.GetEntity<Player>("Player");
+            hud = currentScene.GetEntity<HUD>("HUD");
+
+            if (transform.Position.Y == 0)
+            {
+                physics.Velocity = new Vector(0, Speed);
+            }
+            else
+            {
+                physics.Velocity = new Vector(0, -Speed);
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -64,22 +84,24 @@ namespace MonoGameWindowsStarter.Entities
 
         private void handleCollision(Entity collider)
         {
-            if (collider.GetComponent<Transform>().Name == "Bullet")
+            if (collider.Name == "Bullet")
             {    
                 currentFlashSpeed = 0f;
                 health--;
                 transform.Scale -= new Vector(size, size);
                 transform.Position += new Vector(size, size)/2;
-            }
 
-            if (collider.GetComponent<Transform>().Name == "StaticObject")
-            {
-                SceneManager.GetCurrentScene().RemoveEntity(this);
+                if (health <= 0)
+                {
+                    currentScene.RemoveEntity(this);
+                    player.Score += 100;
+                    hud.Score.GetComponent<TextDraw>().Text = player.Score.ToString();
+                }
             }
 
             if (health <= 0)
             {
-                SceneManager.GetCurrentScene().RemoveEntity(this);
+                currentScene.RemoveEntity(this);
             }
         }
     }

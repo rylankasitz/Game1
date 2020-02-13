@@ -11,6 +11,8 @@ namespace MonoGameWindowsStarter.ECSCore
     {
         public Dictionary<string, Component> Components { get; } = new Dictionary<string, Component>();
 
+        public string Name { get; set; } = "Unamed";
+
         public T AddComponent<T>() where T : Component, new()
         {
             T c = new T();
