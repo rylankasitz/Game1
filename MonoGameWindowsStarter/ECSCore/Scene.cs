@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,6 @@ namespace MonoGameWindowsStarter.ECSCore
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public GameManager GameManager { get; set; }
-
         public string Name { get; set; } = "Unamed Scene";
 
         private Matcher matcher;
@@ -20,8 +20,10 @@ namespace MonoGameWindowsStarter.ECSCore
         public abstract void Initialize();
         public abstract void Update(GameTime gameTime);
 
-        public void AddEntity(Entity entity)
+        public T CreateEntity<T>() where T : Entity, new()
         {
+            T entity = (T) GameManager.EntityTemplates[typeof(T).Name].Copy();
+
             entity.Initialize();
 
             foreach (System system in systems)
@@ -31,6 +33,8 @@ namespace MonoGameWindowsStarter.ECSCore
             }
 
             Entities.Add(entity);
+
+            return entity;
         }
 
         public void RemoveEntity(Entity entity)
@@ -64,11 +68,6 @@ namespace MonoGameWindowsStarter.ECSCore
             Initialize();
 
             matcher = new Matcher(Entities);
-
-            for (int i = 0; i < Entities.Count; i++)
-            {
-                Entities[i].Initialize();
-            }
 
             foreach (System system in systems)
             {

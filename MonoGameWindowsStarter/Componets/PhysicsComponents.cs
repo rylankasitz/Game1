@@ -31,6 +31,14 @@ namespace MonoGameWindowsStarter.Componets
         public Vector Position { get; set; } = new Vector(0, 0);
         public Vector Scale { get; set; } = new Vector(100, 100);
         public float Rotation { get; set; } = 0;
+        public Transform() { }
+        public Transform(int X, int Y, int Width, int Height)
+        {
+            Position.X = X;
+            Position.Y = Y;
+            Scale.X = Width;
+            Scale.Y = Height;
+        }
     }
 
     public class Physics : Component

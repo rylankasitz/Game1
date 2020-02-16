@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.ECSCore
 {
-    public class Component
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class Component : Attribute
     {
         public string Type { get; set; }
     }

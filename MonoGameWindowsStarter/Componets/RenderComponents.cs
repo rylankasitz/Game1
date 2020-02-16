@@ -15,9 +15,14 @@ namespace MonoGameWindowsStarter.Componets
         public class Sprite : Component
         {
             public string ContentName { get; set; } = "test";
-            public Texture2D Texture { get; set; }
             public Rectangle SpriteLocation { get; set; }
             public Color Color { get; set; } = Color.White;
+            public Sprite() { }
+            public Sprite(string ContentName, int SpriteX, int SpriteY, int SpriteWidth, int SpriteHeight)
+            {
+                this.ContentName = ContentName;
+                SpriteLocation = new Rectangle(SpriteX, SpriteY, SpriteWidth, SpriteHeight);
+            }
         }
 
         public class Animation : Component 

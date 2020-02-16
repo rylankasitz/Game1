@@ -10,6 +10,7 @@ using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using Microsoft.Xna.Framework.Input;
 using static MonoGameWindowsStarter.Componets.RenderComponents;
+using System.IO;
 
 namespace MonoGameWindowsStarter.Systems
 {
@@ -18,22 +19,17 @@ namespace MonoGameWindowsStarter.Systems
         private ContentManager contentManager;
         private SpriteFont font;
 
+        private Dictionary<string, Texture2D> textures;
+
         public override bool SetSystemRequirments(Entity entity)
         {
             return (entity.HasComponent<Sprite>() || entity.HasComponent<TextDraw>()) &&
                    entity.HasComponent<Transform>();
         }
 
-        public override void Initialize() { }
+        public override void Initialize() { textures = new Dictionary<string, Texture2D>(); }
 
-        public override void InitializeEntity(Entity entity)
-        {
-            if (entity.HasComponent<Sprite>())
-            {
-                Sprite sprite = entity.GetComponent<Sprite>();
-                sprite.Texture = contentManager.Load<Texture2D>(sprite.ContentName);
-            }
-        }
+        public override void InitializeEntity(Entity entity) { }
 
         public void LoadContent(ContentManager content)
         {
@@ -41,12 +37,15 @@ namespace MonoGameWindowsStarter.Systems
             font = contentManager.Load<SpriteFont>("Fonts/BaseFont");
 
             // Change
-            Texture2D tex = content.Load<Texture2D>("MouseTarget");
+            Texture2D tex = content.Load<Texture2D>("Sprites\\MouseTarget");
             Mouse.SetCursor(MouseCursor.FromTexture2D(tex, -12, -12));
 
-            foreach (Entity entity in Entities)
+            string[] files = Directory.GetFiles(content.RootDirectory + "\\Sprites", "*.xnb", SearchOption.AllDirectories);
+
+            foreach (string file in files)
             {
-                InitializeEntity(entity);
+                string filename = Path.GetFileNameWithoutExtension(file);
+                textures[filename] = contentManager.Load<Texture2D>("Sprites\\" + filename);
             }
         }
 
@@ -59,8 +58,7 @@ namespace MonoGameWindowsStarter.Systems
                 if (entity.HasComponent<Sprite>())
                 {
                     Sprite sprite = entity.GetComponent<Sprite>();
-
-                    spriteBatch.Draw(sprite.Texture,
+                    spriteBatch.Draw(textures[sprite.ContentName],
                         new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)transform.Scale.X, (int)transform.Scale.Y),
                         sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
                         SpriteEffects.None, 1f);

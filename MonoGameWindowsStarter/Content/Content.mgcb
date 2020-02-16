@@ -31,18 +31,6 @@
 /processorParam:Quality=Best
 /build:Audio/Shoot 3.wav
 
-#begin download.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:download.png;CharacterSpriteSheet.png
-
 #begin Fonts/File.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -53,7 +41,7 @@
 #begin GameData/Animations/Player.json
 /copy:GameData/Animations/Player.json
 
-#begin M484BulletCollection1.png
+#begin Sprites/download.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -63,9 +51,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:M484BulletCollection1.png;BulletsSpriteSheet.png
+/build:Sprites/download.png;Sprites/CharacterSpriteSheet.png
 
-#begin Pixel.png
+#begin Sprites/M484BulletCollection1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -75,9 +63,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Pixel.png;PixelWhite.png
+/build:Sprites/M484BulletCollection1.png;Sprites/BulletsSpriteSheet.png
 
-#begin PixelBlue.png
+#begin Sprites/Pixel.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -87,9 +75,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:PixelBlue.png
+/build:Sprites/Pixel.png;Sprites/PixelWhite.png
 
-#begin target_6.png
+#begin Sprites/target_6.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -99,5 +87,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:target_6.png;MouseTarget.png
+/build:Sprites/target_6.png;Sprites/MouseTarget.png
 

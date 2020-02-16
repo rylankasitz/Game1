@@ -36,8 +36,8 @@ namespace MonoGameWindowsStarter.ECSCore
             Entities.Remove(entity);
         }
 
-        public abstract void InitializeEntity(Entity entity);
-        public abstract void Initialize();
-        public abstract bool SetSystemRequirments(Entity entity);
+        public abstract void Initialize();                          // Called when a scene is loaded
+        public abstract void InitializeEntity(Entity entity);       // Called when an entity is created
+        public abstract bool SetSystemRequirments(Entity entity);   // Sets the component requirements for a system
     }
 }

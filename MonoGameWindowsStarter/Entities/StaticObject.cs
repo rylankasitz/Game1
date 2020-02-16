@@ -16,7 +16,7 @@ namespace MonoGameWindowsStarter.Entities
         private string contentName;
         private Rectangle spriteLocation;
 
-        public StaticObject(int x, int y, int w, int h, string contentName, Rectangle spriteLocation)
+        /*public StaticObject(int x, int y, int w, int h, string contentName, Rectangle spriteLocation)
         {
             this.x = x;
             this.y = y;
@@ -25,7 +25,7 @@ namespace MonoGameWindowsStarter.Entities
 
             this.contentName = contentName;
             this.spriteLocation = spriteLocation;
-        }
+        }*/
 
         public override void Initialize()
         {

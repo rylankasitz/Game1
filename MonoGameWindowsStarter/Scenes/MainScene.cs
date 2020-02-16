@@ -33,14 +33,14 @@ namespace MonoGameWindowsStarter.Scenes
 
             currentEnemySpawnTime = enemySpawnTime;
 
-            AddEntity(player = new Player());
-            AddEntity(hud = new HUD());
+            player = CreateEntity<Player>();
+            hud = CreateEntity<HUD>();
 
             // Map (temporary will use map editor later)
-            AddEntity(new StaticObject(GameManager.WindowWidth - wallWidth, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            AddEntity(new StaticObject(0, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            AddEntity(new StaticObject(0, GameManager.WindowHeight - wallWidth, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
-            AddEntity(new StaticObject(0, 0, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            //AddEntity(new StaticObject(GameManager.WindowWidth - wallWidth, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            //AddEntity(new StaticObject(0, 0, wallWidth, GameManager.WindowHeight, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            //AddEntity(new StaticObject(0, GameManager.WindowHeight - wallWidth, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
+            //AddEntity(new StaticObject(0, 0, GameManager.WindowWidth, wallWidth, "PixelWhite", new Rectangle(0, 0, 1, 1)));
         }
 
         public override void Update(GameTime gameTime)
@@ -51,12 +51,10 @@ namespace MonoGameWindowsStarter.Scenes
 
                 if (currentEnemySpawnTime > enemySpawnTime)
                 {
-                    AddEntity(new Enemy(r.Next(wallWidth + spawnBuffer, GameManager.WindowWidth - wallWidth - spawnBuffer),
-                                        r.Next(0, 2) * GameManager.WindowHeight,
-                                        r.Next(1, 2)));
+                    //AddEntity(new Enemy(r.Next(wallWidth + spawnBuffer, GameManager.WindowWidth - wallWidth - spawnBuffer),
+                    //                    r.Next(0, 2) * GameManager.WindowHeight,
+                    //                    r.Next(1, 2)));
                     currentEnemySpawnTime = 0;
-
-                    Console.WriteLine(enemySpawnTime);
                 }
 
                 if (enemySpawnTime > .25f)

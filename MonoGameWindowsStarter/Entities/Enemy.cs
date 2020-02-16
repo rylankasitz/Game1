@@ -26,12 +26,12 @@ namespace MonoGameWindowsStarter.Entities
         private Player player;
         private HUD hud;
 
-        public Enemy(int x, int y, int health)
+        /*public Enemy(int x, int y, int health)
         {
             this.x = x;
             this.y = y;
             this.health = health;
-        }
+        }*/
 
         public override void Initialize()
         {

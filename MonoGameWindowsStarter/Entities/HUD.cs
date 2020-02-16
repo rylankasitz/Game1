@@ -27,7 +27,7 @@ namespace MonoGameWindowsStarter.Entities
             CreateHealth(scene.GetEntity<Player>("Player").Health);
             CreateGameOver();
 
-            scene.AddEntity(Score);
+            Score = scene.CreateEntity<TextEntity>();
         }
 
         public override void Update(GameTime gameTime) { }
@@ -61,7 +61,7 @@ namespace MonoGameWindowsStarter.Entities
 
             for (int i = 0; i < bars; i++)
             {
-                SpriteEntity bar = new SpriteEntity();
+                SpriteEntity bar = scene.CreateEntity<SpriteEntity>();
                 Sprite sprite = bar.GetComponent<Sprite>();
                 Transform trans = bar.GetComponent<Transform>();
 
@@ -70,15 +70,14 @@ namespace MonoGameWindowsStarter.Entities
 
                 trans.Position = new Vector(10 + 20 * i, 5);
                 trans.Scale = new Vector(10, 30);
-
-                scene.AddEntity(bar);
+                
                 Health.Add(bar);
             }
         }
     
         private void CreateGameOver()
         {
-            GameOver = new TextEntity();
+            GameOver = scene.CreateEntity<TextEntity>();
 
             TextDraw text = GameOver.GetComponent<TextDraw>();
             Transform trans = GameOver.GetComponent<Transform>();
@@ -88,8 +87,6 @@ namespace MonoGameWindowsStarter.Entities
 
             trans.Position = new Vector(scene.GameManager.WindowWidth / 2 - 50 , scene.GameManager.WindowHeight / 2 - 14);
             trans.Scale = new Vector(1, 1);
-
-            scene.AddEntity(GameOver);
         }
     }
 

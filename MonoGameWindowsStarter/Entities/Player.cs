@@ -15,6 +15,8 @@ using static MonoGameWindowsStarter.Componets.RenderComponents;
 
 namespace MonoGameWindowsStarter.Entities
 {
+    [Transform(X: 100, Y: 100, Width: 37, Height: 54)]
+    [Sprite(ContentName: "CharacterSpriteSheet", SpriteX: 0, SpriteY: 0, SpriteWidth: 30, SpriteHeight: 52)]
     class Player : Entity
     {
         public int Speed = 5;
@@ -24,7 +26,7 @@ namespace MonoGameWindowsStarter.Entities
         public float Score = 0;
         public bool GameOver = false;
 
-        private Sprite sprite;
+        //private Sprite sprite;
         private Transform transform;
         private BoxCollision boxCollision;
         private Physics physics;
@@ -36,8 +38,8 @@ namespace MonoGameWindowsStarter.Entities
         {
             Name = "Player";
 
-            sprite = AddComponent<Sprite>();
-            transform = AddComponent<Transform>();
+            //sprite = AddComponent<Sprite>();
+            transform = GetComponent<Transform>();
             boxCollision = AddComponent<BoxCollision>();
             physics = AddComponent<Physics>();
             animations = AddComponent<Animation>();
@@ -45,11 +47,11 @@ namespace MonoGameWindowsStarter.Entities
             animations.AnimationFile = "Player";
             animations.CurrentAnimation = "WalkUp";
 
-            sprite.ContentName = "CharacterSpriteSheet";
-            sprite.SpriteLocation = new Rectangle(0, 0, 30, 52);
+            //sprite.ContentName = "CharacterSpriteSheet";
+            //sprite.SpriteLocation = new Rectangle(0, 0, 30, 52);
 
-            transform.Position = new Vector(100, 100);
-            transform.Scale = new Vector(37, 54);
+            //transform.Position = new Vector(100, 100);
+            //transform.Scale = new Vector(37, 54);
 
             boxCollision.HandleCollision = handleCollision;
 
@@ -129,8 +131,7 @@ namespace MonoGameWindowsStarter.Entities
 
         private void fire()
         {      
-            Bullet bullet = new Bullet();
-            SceneManager.GetCurrentScene().AddEntity(bullet);
+            Bullet bullet = SceneManager.GetCurrentScene().CreateEntity<Bullet>();
 
             Vector2 mouseVector = -Vector2.Normalize(transform.Position - InputManager.GetMousePosition());
             

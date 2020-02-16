@@ -10,24 +10,29 @@ namespace MonoGameWindowsStarter.ECSCore
     public abstract class Entity
     {
         public Dictionary<string, Component> Components { get; } = new Dictionary<string, Component>();
-
         public string Name { get; set; } = "Unamed";
+        public string TypeName { get; set; }
+
+        public Entity Copy()
+        {
+            return (Entity) this.MemberwiseClone();
+        }
 
         public T AddComponent<T>() where T : Component, new()
         {
             T c = new T();
-            Components[typeof(T).ToString()] = c;
+            Components[typeof(T).Name] = c;
             return c;
         }
 
         public T GetComponent<T>() where T : Component, new()
         {
-            return (T) Components[typeof(T).ToString()];
+            return (T) Components[typeof(T).Name];
         }
 
         public bool HasComponent<T>() where T : Component, new()
         {
-            return Components.Keys.Contains(typeof(T).ToString());
+            return Components.Keys.Contains(typeof(T).Name);
         }
 
         public abstract void Initialize();
