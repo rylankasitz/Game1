@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
-using static MonoGameWindowsStarter.Componets.RenderComponents;
 using Newtonsoft.Json;
 
 namespace MonoGameWindowsStarter.Systems
@@ -34,13 +34,26 @@ namespace MonoGameWindowsStarter.Systems
         {
             var jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+
             foreach (string file in Directory.GetFiles(Path.Combine(content.RootDirectory, "GameData\\Animations")))
             {
                 animationData[Path.GetFileName(file)] = JsonConvert.DeserializeObject<AnimationData>(File.ReadAllText(file), jsonSerializerSettings);
             }
+
+            foreach(Entity entity in Entities)
+            {
+                InitializeEntity(entity);
+            }
         }
 
-        public override void InitializeEntity(Entity entity) { }
+        public override void InitializeEntity(Entity entity) 
+        { 
+            if (!animationData.ContainsKey(entity.GetComponent<Animation>().AnimationFile + ".json"))
+            {
+                Debug.WriteLine("Failed to find animation data for file: " + entity.GetComponent<Animation>().AnimationFile);
+                Entities.Remove(entity);
+            }
+        }
 
         public void UpdateAnimations(GameTime gameTime)
         {
@@ -48,16 +61,20 @@ namespace MonoGameWindowsStarter.Systems
             {
                 Animation animation = entity.GetComponent<Animation>();
                 AnimationTracker current = getAnimation(animation.CurrentAnimation, animationData[animation.AnimationFile + ".json"]);
-                Sprite sprite = entity.GetComponent<Sprite>();
 
-                current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
+                if (current != null)
+                {
+                    Sprite sprite = entity.GetComponent<Sprite>();
 
-                if (current.TimeIntoAnimation > current.Duration)
-                    current.TimeIntoAnimation = 0;
+                    current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
 
-                current.FrameNumber = (int) Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
+                    if (current.TimeIntoAnimation > current.Duration)
+                        current.TimeIntoAnimation = 0;
 
-                sprite.SpriteLocation = current.CurrentFrame;
+                    current.FrameNumber = (int)Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
+
+                    sprite.SpriteLocation = current.CurrentFrame;
+                }
             }
         }
 
@@ -67,6 +84,8 @@ namespace MonoGameWindowsStarter.Systems
             {
                 if (animationTracker.Name == name) return animationTracker;
             }
+
+            Debug.WriteLine("Animation '" + name + "' was not found");
 
             return null;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,14 @@ namespace MonoGameWindowsStarter.Systems.Global
 
         public static void Play(string audioName)
         {
-            soundEffects[audioName].Play();
+            if (soundEffects.ContainsKey(audioName))
+            {
+                soundEffects[audioName].Play();
+            }
+            else
+            {
+                Debug.WriteLine("Failed to find audio clip " + audioName);
+            }   
         }
 
     }

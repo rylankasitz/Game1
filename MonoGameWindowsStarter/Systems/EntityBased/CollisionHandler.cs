@@ -3,6 +3,7 @@ using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +28,7 @@ namespace MonoGameWindowsStarter.Systems
             }
         }
 
-        public override void InitializeEntity(Entity entity)
-        {
-            BoxCollision collider = entity.GetComponent<BoxCollision>();
-            Transform transform = entity.GetComponent<Transform>();
-            collider.Transform = transform;
-        }
+        public override void InitializeEntity(Entity entity) { }
 
         private bool checkCollision(BoxCollision collider1, BoxCollision collider2, 
             Transform transform1, Transform transform2)
@@ -51,30 +47,34 @@ namespace MonoGameWindowsStarter.Systems
             {
                 Physics physics = entity.GetComponent<Physics>();
 
-                if (transform.Position.Y + transform.Scale.Y - physics.Velocity.Y > p.Y && 
-                    transform.Position.Y - physics.Velocity.Y < p.Y + s.Y) {
+                if (transform.Position.Y + transform.Scale.Y - (physics.Velocity.Y*2) > p.Y && 
+                    transform.Position.Y - (physics.Velocity.Y*2) < p.Y + s.Y) {
 
                     if (physics.Velocity.X > 0)
                     {
                         transform.Position.X = p.X - transform.Scale.X;
+                        Debug.WriteLine("Left");
                     }
                     else if (physics.Velocity.X < 0)
                     {
                         transform.Position.X = p.X + s.X;
+                        Debug.WriteLine("Right");
                     }
                 }
 
-                if (transform.Position.X + transform.Scale.X - physics.Velocity.X > p.X && 
-                    transform.Position.X - physics.Velocity.X < p.X + s.X)
+                if (transform.Position.X + transform.Scale.X - (physics.Velocity.X*2) > p.X && 
+                    transform.Position.X - (physics.Velocity.X*2) < p.X + s.X)
                 {
 
                     if (physics.Velocity.Y > 0)
                     {
                         transform.Position.Y = p.Y - transform.Scale.Y;
+                        Debug.WriteLine("Top");
                     }
                     else if (physics.Velocity.Y < 0)
                     {
                         transform.Position.Y = p.Y + s.Y;
+                        Debug.WriteLine("Bottom");
                     }
                 }
             }
@@ -89,18 +89,21 @@ namespace MonoGameWindowsStarter.Systems
                     BoxCollision collider1 = Entities[i].GetComponent<BoxCollision>();
                     BoxCollision collider2 = Entities[j].GetComponent<BoxCollision>();
 
-                    Transform transform1 = Entities[i].GetComponent<Transform>();
-                    Transform transform2 = Entities[j].GetComponent<Transform>();
-
-                    if (checkCollision(collider1, collider2, transform1, transform2))
+                    if (collider1.Layer != collider2.Layer)
                     {
-                        collider1.HandleCollision?.Invoke(Entities[j]);
-                        collider2.HandleCollision?.Invoke(Entities[i]);
+                        Transform transform1 = Entities[i].GetComponent<Transform>();
+                        Transform transform2 = Entities[j].GetComponent<Transform>();
 
-                        if (!collider1.TriggerOnly && !collider2.TriggerOnly)
+                        if (checkCollision(collider1, collider2, transform1, transform2))
                         {
-                            handlePhysics(Entities[i], transform1, p2, s2);
-                            handlePhysics(Entities[j], transform2, p1, s1);
+                            collider1.HandleCollision?.Invoke(Entities[j]);
+                            collider2.HandleCollision?.Invoke(Entities[i]);
+
+                            if (!collider1.TriggerOnly && !collider2.TriggerOnly)
+                            {
+                                handlePhysics(Entities[i], transform1, p2, s2);
+                                handlePhysics(Entities[j], transform2, p1, s1);
+                            }
                         }
                     }
                 }

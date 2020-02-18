@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\packages\MonoGame.Extended.Content.Pipeline.3.7.0\lib\netstandard2.0\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -41,29 +42,11 @@
 #begin GameData/Animations/Player.json
 /copy:GameData/Animations/Player.json
 
-#begin Sprites/download.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/download.png;Sprites/CharacterSpriteSheet.png
+#begin Maps/Basic Platformer.tsx
+/copy:Maps/Basic Platformer.tsx
 
-#begin Sprites/M484BulletCollection1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/M484BulletCollection1.png;Sprites/BulletsSpriteSheet.png
+#begin Maps/level1.tmx
+/copy:Maps/level1.tmx
 
 #begin Sprites/Pixel.png
 /importer:TextureImporter
@@ -75,17 +58,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/Pixel.png;Sprites/PixelWhite.png
+/build:Sprites/Pixel.png
 
-#begin Sprites/target_6.png
+#begin Sprites/spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=94,129,162,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/target_6.png;Sprites/MouseTarget.png
+/build:Sprites/spritesheet.png
 

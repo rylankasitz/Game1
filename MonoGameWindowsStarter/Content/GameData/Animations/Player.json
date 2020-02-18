@@ -8,8 +8,8 @@
 			"StartY": 525, 
 			"IncrementX": 64, 
 			"IncrementY": 0, 
-			"Width": 30, 
-			"Height": 49		
+			"Width": 21, 
+			"Height": 21		
 		},
 		{		
 			"Name": "IdleUp",

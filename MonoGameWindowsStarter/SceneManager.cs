@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.ECSCore;
-using MonoGameWindowsStarter.Scenes;
+using MonoGameWindowsStarter.PlatformerGame.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

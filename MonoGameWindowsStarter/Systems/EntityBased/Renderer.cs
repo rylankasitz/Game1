@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Content;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using Microsoft.Xna.Framework.Input;
-using static MonoGameWindowsStarter.Componets.RenderComponents;
 using System.IO;
 
 namespace MonoGameWindowsStarter.Systems
@@ -36,10 +35,6 @@ namespace MonoGameWindowsStarter.Systems
             contentManager = content;
             font = contentManager.Load<SpriteFont>("Fonts/BaseFont");
 
-            // Change
-            Texture2D tex = content.Load<Texture2D>("Sprites\\MouseTarget");
-            Mouse.SetCursor(MouseCursor.FromTexture2D(tex, -12, -12));
-
             string[] files = Directory.GetFiles(content.RootDirectory + "\\Sprites", "*.xnb", SearchOption.AllDirectories);
 
             foreach (string file in files)
@@ -61,8 +56,9 @@ namespace MonoGameWindowsStarter.Systems
                     spriteBatch.Draw(textures[sprite.ContentName],
                         new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)transform.Scale.X, (int)transform.Scale.Y),
                         sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
-                        SpriteEffects.None, 1f);
+                        SpriteEffects.None, sprite.Layer);
                 }
+
                 if (entity.HasComponent<TextDraw>())
                 {
                     TextDraw text = entity.GetComponent<TextDraw>();

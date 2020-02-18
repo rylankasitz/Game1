@@ -28,30 +28,40 @@ namespace MonoGameWindowsStarter.Componets
 
     public class Transform : Component
     {
-        public Vector Position { get; set; } = new Vector(0, 0);
-        public Vector Scale { get; set; } = new Vector(100, 100);
-        public float Rotation { get; set; } = 0;
+        public Vector Position { get; set; }
+        public Vector Scale { get; set; }
+        public float Rotation { get; set; }
         public Transform() { }
         public Transform(int X, int Y, int Width, int Height)
         {
-            Position.X = X;
-            Position.Y = Y;
-            Scale.X = Width;
-            Scale.Y = Height;
+            Position = new Vector(X, Y);
+            Scale = new Vector(Width, Height);
         }
     }
 
     public class Physics : Component
     {
-        public Vector Velocity { get; set; } = new Vector(0, 0);
+        public Vector Velocity { get; set; }
+        public Physics() { }
+        public Physics(float VelocityX, float VelocityY)
+        {
+            Velocity = new Vector(VelocityX, VelocityY);
+        }
     }
 
     public class BoxCollision : Component
     {
-        public Vector Position { get; set; } = new Vector(0, 0);
-        public Vector Scale { get; set; } = new Vector(1, 1);
+        public Vector Position { get; set; }
+        public Vector Scale { get; set; }
         public HandleCollision HandleCollision { get; set; }
-        public Transform Transform { get; set; }
-        public bool TriggerOnly { get; set; } = false;
+        public bool TriggerOnly { get; set; }
+        public string Layer { get; set; } = "All";
+        public BoxCollision() { }
+        public BoxCollision(int X, int Y, int Width, int Height, bool TriggerOnly = false)
+        {
+            Position = new Vector(X, Y);
+            Scale = new Vector(Width, Height);
+            this.TriggerOnly = TriggerOnly;
+        }
     }
 }

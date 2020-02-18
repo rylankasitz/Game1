@@ -22,7 +22,7 @@ namespace MonoGameWindowsStarter.ECSCore
 
         public T CreateEntity<T>() where T : Entity, new()
         {
-            T entity = (T) GameManager.EntityTemplates[typeof(T).Name].Copy();
+            T entity = GameManager.Template.CreateTemplateObj<T>();
 
             entity.Initialize();
 
