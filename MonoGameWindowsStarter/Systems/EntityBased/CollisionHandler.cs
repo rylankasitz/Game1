@@ -13,6 +13,7 @@ namespace MonoGameWindowsStarter.Systems
     public class CollisionHandler : ECSCore.System
     {
         private Vector p1, p2, s1, s2;
+        private Grid grid;
 
         public override bool SetSystemRequirments(Entity entity)
         {
@@ -22,9 +23,12 @@ namespace MonoGameWindowsStarter.Systems
 
         public override void Initialize()
         {
+            grid = new Grid();
+
             foreach (Entity entity in Entities)
             {
                 InitializeEntity(entity);
+                entity.AddToGrid(grid);
             }
         }
 
@@ -53,12 +57,10 @@ namespace MonoGameWindowsStarter.Systems
                     if (physics.Velocity.X > 0)
                     {
                         transform.Position.X = p.X - transform.Scale.X;
-                        Debug.WriteLine("Left");
                     }
                     else if (physics.Velocity.X < 0)
                     {
                         transform.Position.X = p.X + s.X;
-                        Debug.WriteLine("Right");
                     }
                 }
 
@@ -69,12 +71,34 @@ namespace MonoGameWindowsStarter.Systems
                     if (physics.Velocity.Y > 0)
                     {
                         transform.Position.Y = p.Y - transform.Scale.Y;
-                        Debug.WriteLine("Top");
                     }
                     else if (physics.Velocity.Y < 0)
                     {
                         transform.Position.Y = p.Y + s.Y;
-                        Debug.WriteLine("Bottom");
+                    }
+                }
+            }
+        }
+
+        private void handleCollisions(Entity entity1, Entity entity2)
+        {
+            BoxCollision collider1 = entity1.GetComponent<BoxCollision>();
+            BoxCollision collider2 = entity2.GetComponent<BoxCollision>();
+
+            if (collider1.Layer != collider2.Layer)
+            {
+                Transform transform1 = entity1.GetComponent<Transform>();
+                Transform transform2 = entity2.GetComponent<Transform>();
+
+                if (checkCollision(collider1, collider2, transform1, transform2))
+                {
+                    collider1.HandleCollision?.Invoke(entity2);
+                    collider2.HandleCollision?.Invoke(entity1);
+
+                    if (!collider1.TriggerOnly && !collider2.TriggerOnly)
+                    {
+                        handlePhysics(entity1, transform1, p2, s2);
+                        handlePhysics(entity2, transform2, p1, s1);
                     }
                 }
             }
@@ -82,31 +106,11 @@ namespace MonoGameWindowsStarter.Systems
 
         public void CheckCollisions()
         {
-            for (int i = 0; i < Entities.Count; i++)
+            grid.Handle(handleCollisions);
+
+            foreach(Entity entity in Entities)
             {
-                for (int j = i + 1; j < Entities.Count; j++)
-                {
-                    BoxCollision collider1 = Entities[i].GetComponent<BoxCollision>();
-                    BoxCollision collider2 = Entities[j].GetComponent<BoxCollision>();
-
-                    if (collider1.Layer != collider2.Layer)
-                    {
-                        Transform transform1 = Entities[i].GetComponent<Transform>();
-                        Transform transform2 = Entities[j].GetComponent<Transform>();
-
-                        if (checkCollision(collider1, collider2, transform1, transform2))
-                        {
-                            collider1.HandleCollision?.Invoke(Entities[j]);
-                            collider2.HandleCollision?.Invoke(Entities[i]);
-
-                            if (!collider1.TriggerOnly && !collider2.TriggerOnly)
-                            {
-                                handlePhysics(Entities[i], transform1, p2, s2);
-                                handlePhysics(Entities[j], transform2, p1, s1);
-                            }
-                        }
-                    }
-                }
+                grid.Move(entity);
             }
         }
     }

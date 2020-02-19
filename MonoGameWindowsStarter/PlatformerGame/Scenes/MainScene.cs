@@ -18,6 +18,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Scenes
             CreateEntity<Player>();
 
             MapManager.LoadMap(GameManager.Content, "level1", this);
+
+            CreateEntity<MapObject>();
         }
 
         public override void Update(GameTime gameTime)

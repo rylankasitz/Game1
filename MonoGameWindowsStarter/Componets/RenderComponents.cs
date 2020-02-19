@@ -28,11 +28,10 @@ namespace MonoGameWindowsStarter.Componets
     public class Animation : Component 
     {
         public string CurrentAnimation { get; set; } = string.Empty;
-        public string AnimationFile { get; set; } = string.Empty;
         public Animation() { }
-        public Animation(string AnimationFile)
+        public Animation(string CurrentAnimation)
         {
-            this.AnimationFile = AnimationFile;
+            this.CurrentAnimation = CurrentAnimation;
         }
     }
 

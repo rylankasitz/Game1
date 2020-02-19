@@ -20,6 +20,7 @@ namespace MonoGameWindowsStarter
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+
         private List<ECSCore.System> systems = new List<ECSCore.System>();
 
         private Renderer renderer;

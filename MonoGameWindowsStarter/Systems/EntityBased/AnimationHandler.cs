@@ -9,14 +9,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
-using Newtonsoft.Json;
+using TiledSharp;
 
 namespace MonoGameWindowsStarter.Systems
 {
     public class AnimationHandler : ECSCore.System
     {
-        private Dictionary<string, AnimationData> animationData = new Dictionary<string, AnimationData>();
+        private Dictionary<string, AnimationTracker> animationData = new Dictionary<string, AnimationTracker>();
         private ContentManager content;
+        private List<TmxTileset> tilesets;
 
         public override bool SetSystemRequirments(Entity entity)
         {
@@ -30,37 +31,33 @@ namespace MonoGameWindowsStarter.Systems
             content = contentManager;
         }
 
-        public override void Initialize() 
+        public override void Initialize()
         {
-            var jsonSerializerSettings = new JsonSerializerSettings();
-            jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            tilesets = new List<TmxTileset>();
 
-            foreach (string file in Directory.GetFiles(Path.Combine(content.RootDirectory, "GameData\\Animations")))
+            string[] files = Directory.GetFiles(content.RootDirectory + "\\Maps", "*.tmx", SearchOption.AllDirectories);
+
+            foreach (string file in files)
             {
-                animationData[Path.GetFileName(file)] = JsonConvert.DeserializeObject<AnimationData>(File.ReadAllText(file), jsonSerializerSettings);
+                TmxMap map = new TmxMap(file);
+                foreach (TmxTileset tileset in map.Tilesets)
+                {
+                    tilesets.Add(tileset);
+                }
             }
 
-            foreach(Entity entity in Entities)
-            {
-                InitializeEntity(entity);
-            }
+            loadFromTileSet();
         }
 
-        public override void InitializeEntity(Entity entity) 
-        { 
-            if (!animationData.ContainsKey(entity.GetComponent<Animation>().AnimationFile + ".json"))
-            {
-                Debug.WriteLine("Failed to find animation data for file: " + entity.GetComponent<Animation>().AnimationFile);
-                Entities.Remove(entity);
-            }
-        }
+        public override void InitializeEntity(Entity entity) { }
 
         public void UpdateAnimations(GameTime gameTime)
         {
             foreach (Entity entity in Entities)
             {
                 Animation animation = entity.GetComponent<Animation>();
-                AnimationTracker current = getAnimation(animation.CurrentAnimation, animationData[animation.AnimationFile + ".json"]);
+
+                AnimationTracker current = getAnimation(animation.CurrentAnimation);
 
                 if (current != null)
                 {
@@ -68,7 +65,7 @@ namespace MonoGameWindowsStarter.Systems
 
                     current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (current.TimeIntoAnimation > current.Duration)
+                    if (current.TimeIntoAnimation > current.TotalDuration)
                         current.TimeIntoAnimation = 0;
 
                     current.FrameNumber = (int)Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
@@ -78,33 +75,77 @@ namespace MonoGameWindowsStarter.Systems
             }
         }
 
-        private AnimationTracker getAnimation(string name, AnimationData data)
+        private AnimationTracker getAnimation(string name)
         {
-            foreach(AnimationTracker animationTracker in data.Animations)
-            {
-                if (animationTracker.Name == name) return animationTracker;
-            }
+            if (animationData.ContainsKey(name)) return animationData[name];
 
             Debug.WriteLine("Animation '" + name + "' was not found");
 
             return null;
         }
+
+        private void loadFromTileSet()
+        {    
+            foreach (TmxTileset tileset in tilesets)
+            {
+                SpriteSheetAnimations spriteSheetAnimation = new SpriteSheetAnimations();
+                spriteSheetAnimation.Width = tileset.TileWidth;
+                spriteSheetAnimation.Height = tileset.TileHeight;
+                spriteSheetAnimation.Margin = tileset.Margin;
+                spriteSheetAnimation.Spacing = tileset.Spacing;
+                foreach (KeyValuePair<int, TmxTilesetTile> tile in tileset.Tiles)
+                {
+                    if (tile.Value.AnimationFrames.Count > 0)
+                    {
+                        AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
+                        string name = "Player";
+                        foreach (TmxAnimationFrame animationFrame in tile.Value.AnimationFrames)
+                        {
+                            int x = (int)(animationFrame.Id % tileset.Columns);
+                            int y = (int)Math.Floor(animationFrame.Id / (float) tileset.Columns);
+                            animationTracker.AddFrame(animationFrame.Duration / (float) 1000, x, y);
+                        }
+                        animationData[name] = animationTracker;
+                    }
+                }
+            }     
+        }
+    }
+
+    public class SpriteSheetAnimations
+    {
+        public List<AnimationTracker> Animations { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Margin { get; set; }
+        public int Spacing { get; set; }
     }
 
     public class AnimationTracker
     {
-        public int FrameCount, StartX, StartY, IncrementX, IncrementY, Width, Height;
-        public float FrameDuration;
-        public string Name;
+        public int FrameNumber { get; set; } = 0;
+        public double TimeIntoAnimation { get; set; } = 0;
 
-        public int FrameNumber;
-        public double TimeIntoAnimation;
-
-        public float Duration
+        public float FrameDuration
         {
             get
             {
-                return FrameDuration * FrameCount;
+                return frames[FrameNumber].Duration;
+            }
+        }
+
+        public float TotalDuration
+        {
+            get
+            {
+                float duration = 0;
+
+                foreach(Frame frame in frames) 
+                {
+                    duration += frame.Duration;
+                }
+
+                return duration;
             }
         }
 
@@ -112,13 +153,35 @@ namespace MonoGameWindowsStarter.Systems
         {
             get
             {
-                return new Rectangle(StartX + IncrementX * FrameNumber, StartY + IncrementY * FrameNumber, Width, Height);
+                return frames[FrameNumber].FrameLocation;
             }
+        }
+
+        private List<Frame> frames;
+        private SpriteSheetAnimations parent;
+
+        public AnimationTracker(SpriteSheetAnimations parent)
+        {
+            this.parent = parent;
+            frames = new List<Frame>();
+        }
+
+        public void AddFrame(float duration, int spriteX, int spriteY)
+        {
+            frames.Add(new Frame(duration, spriteX, spriteY, parent));
         }
     }
 
-    public class AnimationData
+    public class Frame
     {
-        public List<AnimationTracker> Animations { get; set; }
+        public float Duration { get; set; }
+        public Rectangle FrameLocation { get; set; }
+        public Frame(float duration, int spriteX, int spriteY, SpriteSheetAnimations parent)
+        {
+            Duration = duration;
+            FrameLocation = new Rectangle(spriteX * (parent.Width + parent.Spacing) + parent.Margin,
+                                          spriteY * (parent.Height + parent.Spacing) + parent.Margin,
+                                          parent.Width, parent.Height);
+        }
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="ECSCore\Component.cs" />
     <Compile Include="Componets\PhysicsComponents.cs" />
     <Compile Include="ECSCore\Entity.cs" />
+    <Compile Include="ECSCore\Grid.cs" />
     <Compile Include="ECSCore\Scene.cs" />
     <Compile Include="ECSCore\Template.cs" />
     <Compile Include="GameManager.cs" />

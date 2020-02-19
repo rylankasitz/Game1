@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGameWindowsStarter.Componets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace MonoGameWindowsStarter.ECSCore
     {
         public Dictionary<string, Component> Components { set;  get; } = new Dictionary<string, Component>();
         public string Name { get; set; } = "Unamed";
+        public Entity Next { get; set; }
+        public Entity Prev { get; set; }
+        public int OldCellX { get; set; }
+        public int OldCellY { get; set; }
 
         public T AddComponent<T>() where T : Component, new()
         {
@@ -27,6 +32,11 @@ namespace MonoGameWindowsStarter.ECSCore
         public bool HasComponent<T>() where T : Component, new()
         {
             return Components.Keys.Contains(typeof(T).Name);
+        }
+
+        public void AddToGrid(Grid grid)
+        {
+            grid.Add(this);
         }
 
         public abstract void Initialize();

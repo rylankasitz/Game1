@@ -13,11 +13,11 @@ using System.Diagnostics;
 
 namespace MonoGameWindowsStarter.PlatformerGame.Entities
 {
-    [Transform(X: 40, Y: 200, Width: 20, Height: 20)]
+    [Transform(X: 40, Y: 260, Width: 20, Height: 20)]
     [Sprite(ContentName: "spritesheet", layer: 0f, SpriteX: 440, SpriteY: 6, SpriteWidth: 20, SpriteHeight: 20)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
-    [Animation(AnimationFile: "Player")]
+    [Animation(CurrentAnimation: "Player")]
     public class Player : Entity
     {
         public float Speed = 4;
@@ -66,7 +66,6 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             Camera.Position.X = (int) transform.Position.X;
             Camera.Position.Y = 290;
 
-            Debug.WriteLine(isGrounded);
             isGrounded = false;
         }
 

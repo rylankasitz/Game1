@@ -39,6 +39,12 @@
    <object id="1" x="0" y="0" width="20" height="10"/>
   </objectgroup>
  </tile>
+ <tile id="28">
+  <animation>
+   <frame tileid="28" duration="100"/>
+   <frame tileid="29" duration="100"/>
+  </animation>
+ </tile>
  <tile id="31">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="20" height="20"/>
