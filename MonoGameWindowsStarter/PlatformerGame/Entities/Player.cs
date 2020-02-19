@@ -14,10 +14,10 @@ using System.Diagnostics;
 namespace MonoGameWindowsStarter.PlatformerGame.Entities
 {
     [Transform(X: 40, Y: 260, Width: 20, Height: 20)]
-    [Sprite(ContentName: "spritesheet", layer: 0f, SpriteX: 440, SpriteY: 6, SpriteWidth: 20, SpriteHeight: 20)]
+    [Sprite(ContentName: "spritesheet", layer: 0f)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
-    [Animation(CurrentAnimation: "Player")]
+    [Animation(CurrentAnimation: "PlayerWalkForward")]
     public class Player : Entity
     {
         public float Speed = 4;
@@ -27,6 +27,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         private Physics physics;
         private Transform transform;
         private BoxCollision boxCollision;
+        private Animation animation;
 
         private bool isGrounded;
 
@@ -35,6 +36,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             physics = GetComponent<Physics>();
             transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
+            animation = GetComponent<Animation>();
 
             boxCollision.HandleCollision = handleCollision;
             isGrounded = false;
@@ -45,14 +47,17 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         public override void Update(GameTime gameTime)
         {
             physics.Velocity.X = 0;
+            animation.CurrentAnimation = "PlayerIdle";
 
             if (InputManager.KeyPressed(Keys.A))
             {
                 physics.Velocity.X = -Speed;
+                animation.CurrentAnimation = "PlayerWalkForward";
             }
             if (InputManager.KeyPressed(Keys.D))
             {
                 physics.Velocity.X = Speed;
+                animation.CurrentAnimation = "PlayerWalkForward";
             }
             if (InputManager.KeyDown(Keys.Space) && isGrounded)
             {

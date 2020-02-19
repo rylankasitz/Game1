@@ -3,7 +3,7 @@
  <editorsettings>
   <export target="../../../../../../Documents/Basic Platformer.json" format="json"/>
  </editorsettings>
- <image source="../../../../../../Downloads/spritesheet.png" trans="5e81a2" width="694" height="372"/>
+ <image source="../Sprites/spritesheet.png" trans="5e81a2" width="694" height="372"/>
  <tile id="1">
   <objectgroup draworder="index" id="3">
    <object id="6" x="0" y="0" width="20" height="20"/>
@@ -39,7 +39,12 @@
    <object id="1" x="0" y="0" width="20" height="10"/>
   </objectgroup>
  </tile>
- <tile id="28">
+ <tile id="19" type="PlayerIdle">
+  <animation>
+   <frame tileid="19" duration="800"/>
+  </animation>
+ </tile>
+ <tile id="28" type="PlayerWalkForward">
   <animation>
    <frame tileid="28" duration="100"/>
    <frame tileid="29" duration="100"/>
@@ -75,5 +80,11 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="20" height="10"/>
   </objectgroup>
+ </tile>
+ <tile id="433" type="FlyEnemyForward">
+  <animation>
+   <frame tileid="433" duration="200"/>
+   <frame tileid="434" duration="200"/>
+  </animation>
  </tile>
 </tileset>

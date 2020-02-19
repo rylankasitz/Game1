@@ -75,11 +75,13 @@ namespace MonoGameWindowsStarter.Systems
             }
         }
 
+        #region Private Methods
+
         private AnimationTracker getAnimation(string name)
         {
             if (animationData.ContainsKey(name)) return animationData[name];
 
-            Debug.WriteLine("Animation '" + name + "' was not found");
+            Debug.WriteLine($"Animation '{name}' was not found");
 
             return null;
         }
@@ -98,7 +100,7 @@ namespace MonoGameWindowsStarter.Systems
                     if (tile.Value.AnimationFrames.Count > 0)
                     {
                         AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
-                        string name = "Player";
+                        string name = tile.Value.Type;
                         foreach (TmxAnimationFrame animationFrame in tile.Value.AnimationFrames)
                         {
                             int x = (int)(animationFrame.Id % tileset.Columns);
@@ -110,7 +112,11 @@ namespace MonoGameWindowsStarter.Systems
                 }
             }     
         }
+
+        #endregion
     }
+
+    #region Animation Data Structures
 
     public class SpriteSheetAnimations
     {
@@ -184,4 +190,6 @@ namespace MonoGameWindowsStarter.Systems
                                           parent.Width, parent.Height);
         }
     }
+
+    #endregion
 }

@@ -12,10 +12,13 @@ namespace MonoGameWindowsStarter.ECSCore
     {
         public Dictionary<string, Component> Components { set;  get; } = new Dictionary<string, Component>();
         public string Name { get; set; } = "Unamed";
+
         public Entity Next { get; set; }
         public Entity Prev { get; set; }
         public int OldCellX { get; set; }
         public int OldCellY { get; set; }
+
+        #region Component Methods
 
         public T AddComponent<T>() where T : Component, new()
         {
@@ -33,6 +36,8 @@ namespace MonoGameWindowsStarter.ECSCore
         {
             return Components.Keys.Contains(typeof(T).Name);
         }
+
+        #endregion
 
         public void AddToGrid(Grid grid)
         {

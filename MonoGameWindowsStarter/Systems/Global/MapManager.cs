@@ -18,8 +18,6 @@ namespace MonoGameWindowsStarter.Systems.Global
         private static List<MapObject> mapObjects;
         private static TmxMap map;
 
-        #region Monogame Methods
-
         public static void LoadMap (ContentManager content, string name, Scene scene)
         {
             map = new TmxMap(content.RootDirectory + "\\Maps\\" + name + ".tmx");
@@ -28,6 +26,8 @@ namespace MonoGameWindowsStarter.Systems.Global
             setObjects(scene);
             Debug.WriteLine("Loaded Map: " + map);
         }
+
+        #region Private Methods
 
         private static void setObjects(Scene scene)
         {
