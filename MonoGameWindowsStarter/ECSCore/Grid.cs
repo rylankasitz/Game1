@@ -11,7 +11,7 @@ namespace MonoGameWindowsStarter.ECSCore
     public class Grid
     {
         private const int NUM_CELLS = 80;
-        private const int CELL_SIZE = 20;
+        private const int CELL_SIZE = 80;
 
         private Entity[][] cells;
 

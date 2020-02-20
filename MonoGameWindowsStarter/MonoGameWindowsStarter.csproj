@@ -65,7 +65,9 @@
     <Compile Include="ECSCore\Scene.cs" />
     <Compile Include="ECSCore\Template.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="PlatformerGame\Entities\Enemy.cs" />
     <Compile Include="PlatformerGame\Entities\Player.cs" />
+    <Compile Include="PlatformerGame\Entities\WinScreen.cs" />
     <Compile Include="PlatformerGame\Scenes\MainScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

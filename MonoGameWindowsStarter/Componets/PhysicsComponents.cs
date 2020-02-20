@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Componets
 {
-    public delegate void HandleCollision(Entity collider);
+    public delegate void HandleCollision(Entity collider, string side);
 
     public class Vector
     {
@@ -21,6 +21,7 @@ namespace MonoGameWindowsStarter.Componets
 
         public static Vector operator +(Vector a, Vector b) => new Vector(a.X + b.X, a.Y + b.Y);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.X - b.X, a.Y - b.Y);
+        public static Vector operator *(Vector a, Vector b) => new Vector(a.X * b.X, a.Y * b.Y);
 
         public static Vector operator *(Vector v, float n) => new Vector(v.X * n, v.Y * n);
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
@@ -57,7 +58,7 @@ namespace MonoGameWindowsStarter.Componets
         public bool TriggerOnly { get; set; }
         public string Layer { get; set; } = "All";
         public BoxCollision() { }
-        public BoxCollision(int X, int Y, int Width, int Height, bool TriggerOnly = false)
+        public BoxCollision(int X, int Y, float Width, float Height, bool TriggerOnly = false)
         {
             Position = new Vector(X, Y);
             Scale = new Vector(Width, Height);

@@ -24,7 +24,7 @@ namespace MonoGameWindowsStarter.Systems.Global
             mapObjects = new List<MapObject>();
 
             setObjects(scene);
-            Debug.WriteLine("Loaded Map: " + map);
+            Debug.WriteLine($"Loaded Map: {name}");
         }
 
         #region Private Methods
@@ -33,7 +33,8 @@ namespace MonoGameWindowsStarter.Systems.Global
         {
             int tileset = 0;
             float layernum = 1;
-            float layerinc = 1f / (float) (map.Layers.Count*2);
+            float layerinc = 1f / (float)(map.Layers.Count*2);
+
             foreach (TmxLayer layer in map.Layers)
             {
                 int gridNum = 0;
@@ -55,7 +56,7 @@ namespace MonoGameWindowsStarter.Systems.Global
                         Transform transform = obj.GetComponent<Transform>();
                         Sprite sprite = obj.GetComponent<Sprite>();
 
-                        obj.Name = "Map Object " + tile.Gid.ToString();
+                        obj.Name = getProperty("Name", tile, tileset);
 
                         transform.Position = new Vector(x, y);
                         transform.Scale = new Vector(map.TileWidth, map.TileHeight);
@@ -71,11 +72,15 @@ namespace MonoGameWindowsStarter.Systems.Global
                         {
                             BoxCollision boxCollision = obj.AddComponent<BoxCollision>();
                             boxCollision.Layer = "Map";
-                            int w = (int)map.Tilesets[tileset].Tiles[tile.Gid - 1].ObjectGroups[0].Objects[0].Width;
-                            int h = (int)map.Tilesets[tileset].Tiles[tile.Gid - 1].ObjectGroups[0].Objects[0].Height;
-                            boxCollision.Position = new Vector((int)map.Tilesets[tileset].Tiles[tile.Gid - 1].ObjectGroups[0].Objects[0].X,
-                                                               (int)map.Tilesets[tileset].Tiles[tile.Gid - 1].ObjectGroups[0].Objects[0].Y);
-                            boxCollision.Scale = new Vector((float) w / (float) map.TileWidth, (float) h / (float) map.TileHeight);
+
+                            TmxObject colObj = map.Tilesets[tileset].Tiles[tile.Gid - 1].ObjectGroups[0].Objects[0];
+
+                            int w = (int)colObj.Width;
+                            int h = (int)colObj.Height;
+
+                            boxCollision.Position = new Vector((int)colObj.X, (int)colObj.Y);
+                            boxCollision.Scale = new Vector(w / (float)map.TileWidth, h / (float)map.TileHeight);
+                            boxCollision.TriggerOnly = getProperty("Trigger", tile, tileset) == "true";
                         }
 
                         mapObjects.Add(obj);
@@ -84,6 +89,16 @@ namespace MonoGameWindowsStarter.Systems.Global
                 }
                 layernum-=layerinc;
             }
+        }
+
+        private static string getProperty(string name, TmxLayerTile tile, int tileset, string unknownProp = "Unamed")
+        {
+            if (map.Tilesets[tileset].Tiles.ContainsKey(tile.Gid - 1))
+            {
+                if (map.Tilesets[tileset].Tiles[tile.Gid - 1].Properties.ContainsKey(name))
+                    return map.Tilesets[tileset].Tiles[tile.Gid - 1].Properties[name];
+            }
+            return unknownProp;
         }
 
         #endregion

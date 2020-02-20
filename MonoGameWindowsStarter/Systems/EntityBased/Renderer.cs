@@ -46,6 +46,7 @@ namespace MonoGameWindowsStarter.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
+           
             foreach (Entity entity in Entities)
             {
                 Transform transform = entity.GetComponent<Transform>();
@@ -56,7 +57,7 @@ namespace MonoGameWindowsStarter.Systems
                     spriteBatch.Draw(textures[sprite.ContentName],
                         new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)transform.Scale.X, (int)transform.Scale.Y),
                         sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
-                        SpriteEffects.None, sprite.Layer);
+                        sprite.SpriteEffects, sprite.Layer);
                 }
 
                 if (entity.HasComponent<TextDraw>())

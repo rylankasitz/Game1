@@ -19,6 +19,8 @@ namespace MonoGameWindowsStarter.Systems
         private ContentManager content;
         private List<TmxTileset> tilesets;
 
+        #region ECS Methods
+
         public override bool SetSystemRequirments(Entity entity)
         {
             return entity.HasComponent<Sprite>() &&
@@ -47,17 +49,23 @@ namespace MonoGameWindowsStarter.Systems
             }
 
             loadFromTileSet();
+
+            foreach(Entity entity in Entities)
+            {
+                InitializeEntity(entity);
+            }
         }
 
-        public override void InitializeEntity(Entity entity) { }
+        public override void InitializeEntity(Entity entity) 
+        {
+            getAnimation(entity);
+        }
 
         public void UpdateAnimations(GameTime gameTime)
         {
             foreach (Entity entity in Entities)
             {
-                Animation animation = entity.GetComponent<Animation>();
-
-                AnimationTracker current = getAnimation(animation.CurrentAnimation);
+                AnimationTracker current = getAnimation(entity);
 
                 if (current != null)
                 {
@@ -75,13 +83,27 @@ namespace MonoGameWindowsStarter.Systems
             }
         }
 
+        #endregion
+
         #region Private Methods
 
-        private AnimationTracker getAnimation(string name)
+        private AnimationTracker getAnimation(Entity entity)
         {
-            if (animationData.ContainsKey(name)) return animationData[name];
+            Animation animation = entity.GetComponent<Animation>();
 
-            Debug.WriteLine($"Animation '{name}' was not found");
+            if (animation.AnimationTracker.ContainsKey(animation.CurrentAnimation))
+            {
+                return animation.AnimationTracker[animation.CurrentAnimation];
+            }
+
+            if (animationData.ContainsKey(animation.CurrentAnimation)) {
+                AnimationTracker animationTracker = new AnimationTracker(animationData[animation.CurrentAnimation].Parent);
+                animationTracker.Frames = animationData[animation.CurrentAnimation].Frames;
+                animation.AnimationTracker[animation.CurrentAnimation] = animationTracker;
+                return animationTracker;               
+            }
+
+            Debug.WriteLine($"Animation '{animation.CurrentAnimation}' was not found");
 
             return null;
         }
@@ -95,18 +117,24 @@ namespace MonoGameWindowsStarter.Systems
                 spriteSheetAnimation.Height = tileset.TileHeight;
                 spriteSheetAnimation.Margin = tileset.Margin;
                 spriteSheetAnimation.Spacing = tileset.Spacing;
+
                 foreach (KeyValuePair<int, TmxTilesetTile> tile in tileset.Tiles)
                 {
                     if (tile.Value.AnimationFrames.Count > 0)
                     {
                         AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
-                        string name = tile.Value.Type;
+
+                        string name = "Unamed " + tile.Key;
+                        if (tile.Value.Properties.ContainsKey("Animation"))
+                            name = tile.Value.Properties["Animation"];
+
                         foreach (TmxAnimationFrame animationFrame in tile.Value.AnimationFrames)
                         {
                             int x = (int)(animationFrame.Id % tileset.Columns);
                             int y = (int)Math.Floor(animationFrame.Id / (float) tileset.Columns);
                             animationTracker.AddFrame(animationFrame.Duration / (float) 1000, x, y);
                         }
+
                         animationData[name] = animationTracker;
                     }
                 }
@@ -131,12 +159,14 @@ namespace MonoGameWindowsStarter.Systems
     {
         public int FrameNumber { get; set; } = 0;
         public double TimeIntoAnimation { get; set; } = 0;
+        public List<Frame> Frames { get; set; }
+        public SpriteSheetAnimations Parent { get; set; }
 
         public float FrameDuration
         {
             get
             {
-                return frames[FrameNumber].Duration;
+                return Frames[FrameNumber].Duration;
             }
         }
 
@@ -146,7 +176,7 @@ namespace MonoGameWindowsStarter.Systems
             {
                 float duration = 0;
 
-                foreach(Frame frame in frames) 
+                foreach(Frame frame in Frames) 
                 {
                     duration += frame.Duration;
                 }
@@ -159,22 +189,19 @@ namespace MonoGameWindowsStarter.Systems
         {
             get
             {
-                return frames[FrameNumber].FrameLocation;
+                return Frames[FrameNumber].FrameLocation;
             }
         }
 
-        private List<Frame> frames;
-        private SpriteSheetAnimations parent;
-
         public AnimationTracker(SpriteSheetAnimations parent)
         {
-            this.parent = parent;
-            frames = new List<Frame>();
+            this.Parent = parent;
+            Frames = new List<Frame>();
         }
 
         public void AddFrame(float duration, int spriteX, int spriteY)
         {
-            frames.Add(new Frame(duration, spriteX, spriteY, parent));
+            Frames.Add(new Frame(duration, spriteX, spriteY, Parent));
         }
     }
 

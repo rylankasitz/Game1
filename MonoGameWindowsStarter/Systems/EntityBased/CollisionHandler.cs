@@ -15,6 +15,8 @@ namespace MonoGameWindowsStarter.Systems
         private Vector p1, p2, s1, s2;
         private Grid grid;
 
+        #region ECS Methods
+
         public override bool SetSystemRequirments(Entity entity)
         {
             return entity.HasComponent<BoxCollision>() &&
@@ -34,19 +36,32 @@ namespace MonoGameWindowsStarter.Systems
 
         public override void InitializeEntity(Entity entity) { }
 
+        public void CheckCollisions()
+        {
+            grid.Handle(handleCollisions);
+
+            foreach (Entity entity in Entities)
+            {
+                grid.Move(entity);
+            }
+        }
+
+        #endregion
+
         private bool checkCollision(BoxCollision collider1, BoxCollision collider2, 
             Transform transform1, Transform transform2)
         {
             p1 = collider1.Position + transform1.Position;
             p2 = collider2.Position + transform2.Position;
-            s1 = collider1.Scale + transform1.Scale;
-            s2 = collider2.Scale + transform2.Scale;
+            s1 = collider1.Scale * transform1.Scale;
+            s2 = collider2.Scale * transform2.Scale;
 
             return (p1.X < p2.X + s2.X && p1.X + s1.X > p2.X && p1.Y < p2.Y + s2.Y && p1.Y + s1.Y > p2.Y);
         }
 
-        private void handlePhysics(Entity entity, Transform transform, Vector p, Vector s)
+        private string handlePhysics(Entity entity, Transform transform, Vector p, Vector s, bool isTrigger)
         {
+            string side = "";
             if (entity.HasComponent<Physics>())
             {
                 Physics physics = entity.GetComponent<Physics>();
@@ -56,11 +71,15 @@ namespace MonoGameWindowsStarter.Systems
 
                     if (physics.Velocity.X > 0)
                     {
-                        transform.Position.X = p.X - transform.Scale.X;
+                        if (!isTrigger)
+                            transform.Position.X = p.X - transform.Scale.X;
+                        side = "Left";
                     }
                     else if (physics.Velocity.X < 0)
                     {
-                        transform.Position.X = p.X + s.X;
+                        if (!isTrigger)
+                            transform.Position.X = p.X + s.X;
+                        side = "Right";
                     }
                 }
 
@@ -70,14 +89,20 @@ namespace MonoGameWindowsStarter.Systems
 
                     if (physics.Velocity.Y > 0)
                     {
-                        transform.Position.Y = p.Y - transform.Scale.Y;
+                        if (!isTrigger)
+                            transform.Position.Y = p.Y - transform.Scale.Y;
+                        side = "Top";
                     }
                     else if (physics.Velocity.Y < 0)
                     {
-                        transform.Position.Y = p.Y + s.Y;
+                        if (!isTrigger)
+                            transform.Position.Y = p.Y + s.Y;
+                        side = "Bottom";
                     }
                 }
             }
+
+            return side;
         }
 
         private void handleCollisions(Entity entity1, Entity entity2)
@@ -85,32 +110,19 @@ namespace MonoGameWindowsStarter.Systems
             BoxCollision collider1 = entity1.GetComponent<BoxCollision>();
             BoxCollision collider2 = entity2.GetComponent<BoxCollision>();
 
-            if (collider1.Layer != collider2.Layer)
+            if (collider1.Layer != collider2.Layer || (collider1.Layer == "All" && collider2.Layer == "All"))
             {
                 Transform transform1 = entity1.GetComponent<Transform>();
                 Transform transform2 = entity2.GetComponent<Transform>();
 
                 if (checkCollision(collider1, collider2, transform1, transform2))
                 {
-                    collider1.HandleCollision?.Invoke(entity2);
-                    collider2.HandleCollision?.Invoke(entity1);
+                    string side1 = handlePhysics(entity1, transform1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
+                    string side2 = handlePhysics(entity2, transform2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
 
-                    if (!collider1.TriggerOnly && !collider2.TriggerOnly)
-                    {
-                        handlePhysics(entity1, transform1, p2, s2);
-                        handlePhysics(entity2, transform2, p1, s1);
-                    }
+                    collider1.HandleCollision?.Invoke(entity2, side1);
+                    collider2.HandleCollision?.Invoke(entity1, side2);
                 }
-            }
-        }
-
-        public void CheckCollisions()
-        {
-            grid.Handle(handleCollisions);
-
-            foreach(Entity entity in Entities)
-            {
-                grid.Move(entity);
             }
         }
     }
