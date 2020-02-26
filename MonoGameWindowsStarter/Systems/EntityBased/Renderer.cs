@@ -18,7 +18,7 @@ namespace MonoGameWindowsStarter.Systems
         private ContentManager contentManager;
         private SpriteFont font;
 
-        private Dictionary<string, Texture2D> textures;
+        private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public override bool SetSystemRequirments(Entity entity)
         {
@@ -26,9 +26,11 @@ namespace MonoGameWindowsStarter.Systems
                    entity.HasComponent<Transform>();
         }
 
-        public override void Initialize() { textures = new Dictionary<string, Texture2D>(); }
+        public override void Initialize() { }
 
         public override void InitializeEntity(Entity entity) { }
+
+        public override void RemoveFromSystem(Entity entity) { }
 
         public void LoadContent(ContentManager content)
         {

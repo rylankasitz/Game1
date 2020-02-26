@@ -19,15 +19,11 @@ namespace MonoGameWindowsStarter.Systems
             return entity.HasComponent<StateMachine>();
         }
 
-        public override void Initialize()
-        {
-            
-        }
+        public override void Initialize() { }
 
-        public override void InitializeEntity(Entity entity)
-        {
-            
-        }
+        public override void InitializeEntity(Entity entity) { }
+
+        public override void RemoveFromSystem(Entity entity) { }
 
         public void UpdateStateMachine(GameTime gameTime)
         {

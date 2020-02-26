@@ -48,6 +48,20 @@
    <object id="1" x="0" y="11" width="20" height="9"/>
   </objectgroup>
  </tile>
+ <tile id="11">
+  <properties>
+   <property name="Name" value="Water"/>
+   <property name="Trigger" type="bool" value="true"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="11" width="20" height="9">
+    <properties>
+     <property name="Name" value="Water"/>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
  <tile id="12">
   <properties>
    <property name="Name" value="Lava"/>
@@ -72,6 +86,14 @@
   </properties>
   <animation>
    <frame tileid="19" duration="800"/>
+  </animation>
+ </tile>
+ <tile id="20">
+  <properties>
+   <property name="Animation" value="Jump"/>
+  </properties>
+  <animation>
+   <frame tileid="20" duration="100"/>
   </animation>
  </tile>
  <tile id="28">
@@ -155,6 +177,16 @@
   </objectgroup>
  </tile>
  <tile id="370">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="20" height="10"/>
+  </objectgroup>
+ </tile>
+ <tile id="371">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="20" height="10"/>
+  </objectgroup>
+ </tile>
+ <tile id="372">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="20" height="10"/>
   </objectgroup>

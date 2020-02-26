@@ -69,7 +69,7 @@
     <Compile Include="PlatformerGame\Entities\Enemy.cs" />
     <Compile Include="PlatformerGame\Entities\Player.cs" />
     <Compile Include="PlatformerGame\Entities\WinScreen.cs" />
-    <Compile Include="PlatformerGame\Scenes\Level1.cs" />
+    <Compile Include="PlatformerGame\Scenes\Level.cs" />
     <Compile Include="PlatformerGame\Scenes\Level2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.PlatformerGame.Scenes
 {
-    public class Level1 : Scene
+    public class Level : Scene
     {
         public WinScreen WinScreen;
 
-        public Level1() { Name = "testScene";  }
+        public Level() { Name = "Level";  }
         public override void Initialize()
         {
             MapManager.LoadMap(GameManager.Content, "level1", this);

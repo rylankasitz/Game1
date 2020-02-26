@@ -29,6 +29,16 @@ namespace MonoGameWindowsStarter.ECSCore
             }
         }
 
+        public void Remove(Entity entity)
+        {
+            Transform transform = entity.GetComponent<Transform>();
+
+            int cellX = (int)(transform.Position.X / CELL_SIZE);
+            int cellY = (int)(transform.Position.Y / CELL_SIZE);
+
+            cells[cellX][cellY] = null;
+        }
+
         public void Add(Entity entity)
         {
             Transform transform = entity.GetComponent<Transform>();

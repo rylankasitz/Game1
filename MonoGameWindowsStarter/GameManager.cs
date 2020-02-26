@@ -56,7 +56,7 @@ namespace MonoGameWindowsStarter
 
             SceneManager.systems = systems;
             SceneManager.Initialize(this);
-            SceneManager.LoadScene("testScene");
+            SceneManager.LoadScene("Level");
 
             base.Initialize();
         }

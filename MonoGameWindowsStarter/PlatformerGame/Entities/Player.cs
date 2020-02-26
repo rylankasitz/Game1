@@ -35,6 +35,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         private StateMachine stateMachine;
 
         private bool isGrounded;
+        private double waitTime;
+        private int levelnum;
 
         public override void Initialize()
         {
@@ -50,10 +52,14 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             stateMachine.States.Add("walk right", walkRight);
             stateMachine.States.Add("jump", jump);
             stateMachine.States.Add("falling", falling);
+            stateMachine.States.Add("next level", nextLevel);
             stateMachine.CurrentState = "idle";
 
             boxCollision.HandleCollision = handleCollision;
             isGrounded = false;
+
+            waitTime = 0;
+            levelnum = 1;
 
             Camera.Zoom = 3;
         }
@@ -75,23 +81,13 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
 
             if (collider.Name == "Lava" || collider.Name == "Water" || collider.Name == "Enemy")
             {
-                respawn();
+                transform.Position = new Vector(260, 340);
             }
 
             if (collider.Name == "Flag")
             {
-                Win();
+                stateMachine.CurrentState = "next level";
             }
-        }
-
-        private void Win()
-        {
-            ((Level1)SceneManager.GetCurrentScene()).WinScreen.Show("Level Complete");
-        }
-
-        private void respawn()
-        {
-            transform.Position = new Vector(260, 340);
         }
 
         private void handleStates()
@@ -149,6 +145,21 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
                     }
                     break;
 
+                case "next level":
+                    if (waitTime > 1)
+                    {
+                        stateMachine.CurrentState = "idle";
+                        waitTime = 0;
+                        if (levelnum != 2)
+                        {
+                            MapManager.LoadMap(SceneManager.GetCurrentScene().GameManager.Content, "Level2", SceneManager.GetCurrentScene());
+                            levelnum++;
+                            transform.Position = new Vector(260, 340);
+                            ((Level)SceneManager.GetCurrentScene()).WinScreen.Show("");
+                        }
+                    }
+                    break;
+
                 default:
                     stateMachine.CurrentState = "idle";
                     break;         
@@ -180,6 +191,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         private void jump(GameTime gameTime)
         {
             physics.Velocity.Y = -JumpForce;
+            animation.CurrentAnimation = "Jump";
         }
 
         private void falling(GameTime gameTime)
@@ -198,6 +210,12 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             {
                 physics.Velocity.X = 0;
             }
+        }
+
+        private void nextLevel(GameTime gameTime)
+        {
+            waitTime += gameTime.ElapsedGameTime.TotalSeconds;
+            ((Level)SceneManager.GetCurrentScene()).WinScreen.Show("Level Complete");
         }
 
         #endregion

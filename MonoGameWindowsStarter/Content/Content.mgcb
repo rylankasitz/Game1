@@ -45,6 +45,9 @@
 #begin Maps/level1.tmx
 /copy:Maps/level1.tmx
 
+#begin Maps/level2.tmx
+/copy:Maps/level2.tmx
+
 #begin Sprites/Pixel.png
 /importer:TextureImporter
 /processor:TextureProcessor

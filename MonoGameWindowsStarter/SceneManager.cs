@@ -22,7 +22,8 @@ namespace MonoGameWindowsStarter
             gameManager = game;
 
             // Add all scenes here
-            scenes.Add(new Level1());
+            scenes.Add(new Level());
+            scenes.Add(new Level2());
         }
 
         public static Scene GetCurrentScene()

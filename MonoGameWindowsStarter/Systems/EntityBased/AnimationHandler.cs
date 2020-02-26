@@ -61,6 +61,8 @@ namespace MonoGameWindowsStarter.Systems
             getAnimation(entity);
         }
 
+        public override void RemoveFromSystem(Entity entity) { }
+
         public void UpdateAnimations(GameTime gameTime)
         {
             foreach (Entity entity in Entities)

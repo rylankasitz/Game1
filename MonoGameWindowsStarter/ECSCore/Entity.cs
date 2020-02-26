@@ -37,11 +37,21 @@ namespace MonoGameWindowsStarter.ECSCore
             return Components.Keys.Contains(typeof(T).Name);
         }
 
+        public void RemoveComponent<T>() where T : Component
+        {
+            Components.Remove(typeof(T).Name);
+        }
+
         #endregion
 
         public void AddToGrid(Grid grid)
         {
             grid.Add(this);
+        }
+
+        public void RemoveFromGrid(Grid grid)
+        {
+            grid.Remove(this);
         }
 
         public abstract void Initialize();

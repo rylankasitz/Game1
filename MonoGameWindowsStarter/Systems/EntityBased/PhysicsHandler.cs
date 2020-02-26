@@ -21,6 +21,8 @@ namespace MonoGameWindowsStarter.Systems
 
         public override void InitializeEntity(Entity entity) { }
 
+        public override void RemoveFromSystem(Entity entity) { }
+
         public void HandlePhysics()
         {
             foreach (Entity entity in Entities)

@@ -30,11 +30,18 @@ namespace MonoGameWindowsStarter.Systems
             foreach (Entity entity in Entities)
             {
                 InitializeEntity(entity);
-                entity.AddToGrid(grid);
             }
         }
 
-        public override void InitializeEntity(Entity entity) { }
+        public override void InitializeEntity(Entity entity) 
+        {
+            entity.AddToGrid(grid);
+        }
+
+        public override void RemoveFromSystem(Entity entity)
+        {
+            entity.RemoveFromGrid(grid);
+        }
 
         public void CheckCollisions()
         {

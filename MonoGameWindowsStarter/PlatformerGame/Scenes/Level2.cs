@@ -14,9 +14,10 @@ namespace MonoGameWindowsStarter.PlatformerGame.Scenes
     {
         public WinScreen WinScreen;
 
+        public Level2() { Name = "Level2"; }
         public override void Initialize()
         {
-            MapManager.LoadMap(GameManager.Content, "level1", this);
+            MapManager.LoadMap(GameManager.Content, "level2", this);
 
             CreateEntity<Player>();
             WinScreen = CreateEntity<WinScreen>();
