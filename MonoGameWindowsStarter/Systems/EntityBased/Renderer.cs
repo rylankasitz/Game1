@@ -33,7 +33,7 @@ namespace MonoGameWindowsStarter.Systems
         public void LoadContent(ContentManager content)
         {
             contentManager = content;
-            font = contentManager.Load<SpriteFont>("Fonts/BaseFont");
+            font = contentManager.Load<SpriteFont>("Fonts/BasicFont");
 
             string[] files = Directory.GetFiles(content.RootDirectory + "\\Sprites", "*.xnb", SearchOption.AllDirectories);
 

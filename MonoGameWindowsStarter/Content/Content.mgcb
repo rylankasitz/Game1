@@ -32,12 +32,12 @@
 /processorParam:Quality=Best
 /build:Audio/Shoot 3.wav
 
-#begin Fonts/File.spritefont
+#begin Fonts/BasicFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/File.spritefont;Fonts/BaseFont.spritefont
+/build:Fonts/BasicFont.spritefont
 
 #begin Maps/Basic Platformer.tsx
 /copy:Maps/Basic Platformer.tsx

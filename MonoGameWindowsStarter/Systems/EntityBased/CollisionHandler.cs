@@ -48,6 +48,8 @@ namespace MonoGameWindowsStarter.Systems
 
         #endregion
 
+        #region Private Methods
+
         private bool checkCollision(BoxCollision collider1, BoxCollision collider2, 
             Transform transform1, Transform transform2)
         {
@@ -125,5 +127,7 @@ namespace MonoGameWindowsStarter.Systems
                 }
             }
         }
+
+        #endregion
     }
 }

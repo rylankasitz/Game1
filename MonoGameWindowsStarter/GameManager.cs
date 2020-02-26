@@ -27,6 +27,7 @@ namespace MonoGameWindowsStarter
         private CollisionHandler collisionHandler;
         private PhysicsHandler physicsHandler;
         private AnimationHandler animationHandler;
+        private StateHandler stateHandler;
 
         public GameManager()
         {
@@ -40,6 +41,7 @@ namespace MonoGameWindowsStarter
             systems.Add(collisionHandler = new CollisionHandler());
             systems.Add(physicsHandler = new PhysicsHandler());
             systems.Add(animationHandler = new AnimationHandler(Content));
+            systems.Add(stateHandler = new StateHandler());
         }
 
         #region Monogame Methods
@@ -77,11 +79,12 @@ namespace MonoGameWindowsStarter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            SceneManager.UpdateScene(gameTime);
-
             physicsHandler.HandlePhysics();
             collisionHandler.CheckCollisions();
             animationHandler.UpdateAnimations(gameTime);
+            stateHandler.UpdateStateMachine(gameTime);
+
+            SceneManager.UpdateScene(gameTime);
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
 
