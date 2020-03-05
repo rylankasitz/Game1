@@ -23,9 +23,9 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
     [StateMachine()]
     public class Player : Entity
     {
-        public float Speed = 2.5f;
-        public float Gravity = .15f;
-        public float JumpForce = 4f;
+        public float Speed = 4;
+        public float Gravity = .5f;
+        public float JumpForce = 6;
 
         private Physics physics;
         private Transform transform;

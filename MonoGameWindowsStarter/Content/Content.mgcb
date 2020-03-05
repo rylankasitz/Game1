@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\packages\MonoGame.Extended.Content.Pipeline.3.7.0\lib\netstandard2.0\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\PlatformerContentExtension\bin\Debug\PlatformerContentExtension.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -39,14 +39,20 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/BasicFont.spritefont
 
-#begin Maps/Basic Platformer.tsx
-/copy:Maps/Basic Platformer.tsx
+#begin Maps/basic_platformer.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Maps/basic_platformer.tsx
 
 #begin Maps/level1.tmx
-/copy:Maps/level1.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/level1.tmx
 
 #begin Maps/level2.tmx
-/copy:Maps/level2.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/level2.tmx
 
 #begin Sprites/Pixel.png
 /importer:TextureImporter

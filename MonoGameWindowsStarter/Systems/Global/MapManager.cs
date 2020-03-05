@@ -10,26 +10,64 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameWindowsStarter.Componets;
 using MonoGameWindowsStarter.ECSCore;
 using TiledSharp;
+using PlatformLibrary;
 
 namespace MonoGameWindowsStarter.Systems.Global
 {
     public static class MapManager
     {
         private static List<Entity> mapObjects = new List<Entity>();
-        private static TmxMap map;
+        private static Tilemap tilemap;
 
         public static void LoadMap (ContentManager content, string name, Scene scene)
         {
-            map = new TmxMap(content.RootDirectory + "\\Maps\\" + name + ".tmx");
+            //map = new TmxMap(content.RootDirectory + "\\Maps\\" + name + ".tmx");
+            tilemap = content.Load<Tilemap>("Maps\\" + name);
 
             removeMapObjects();
-            setObjects(scene);
+            createMapObjects(scene);
             Debug.WriteLine($"Loaded Map: {name}");
         }
 
         #region Private Methods
 
-        private static void setObjects(Scene scene)
+        private static void createMapObjects(Scene scene)
+        {
+            float layernum = .1f;
+            foreach (var layer in tilemap.Layers)
+            {
+                for (uint y = 0; y < tilemap.MapHeight; y++)
+                {
+                    for (uint x = 0; x < tilemap.MapWidth; x++)
+                    {
+                        uint dataIndex = y * tilemap.MapWidth + x;
+                        uint tileIndex = layer.Data[dataIndex];
+                        if (tileIndex != 0 && tileIndex < tilemap.Tiles.Length)
+                        {
+                            Vector position = new Vector(x * tilemap.TileWidth, y * tilemap.TileHeight);
+                            Vector scale = new Vector(tilemap.Tiles[tileIndex].Width, tilemap.Tiles[tileIndex].Height);
+
+                            if (tilemap.Tiles[tileIndex].BoxCollider == Rectangle.Empty)
+                            {
+                                MapObject mapObject = scene.CreateEntity<MapObject>();
+                                setObjectPosition(mapObject, position, scale, tilemap.Tiles[tileIndex].Source, layernum, "spritesheet");
+                                mapObjects.Add(mapObject);
+                            }
+                            else
+                            {
+                                MapObjectCollision mapObject = scene.CreateEntity<MapObjectCollision>();
+                                setObjectPosition(mapObject, position, scale, tilemap.Tiles[tileIndex].Source, layernum, "spritesheet");
+                                setCollision(mapObject, tilemap.Tiles[tileIndex].BoxCollider);
+                                mapObjects.Add(mapObject);
+                            }
+                        }
+                    }
+                }
+                layernum += 1f / (float)(tilemap.Layers.Length * 2);
+            }
+        }
+
+        /*private static void setObjects(Scene scene)
         {
             int tileset = 0;
             float layernum = 1;
@@ -80,27 +118,32 @@ namespace MonoGameWindowsStarter.Systems.Global
                 }
                 layernum-=layerinc;
             }
-        }
+        }*/
 
-        private static void setObjectPosition(Entity obj, int row, int col, int x, int y, TmxLayerTile tile, int tileset, float layernum)
+        private static void setObjectPosition(Entity obj, Vector position, Vector scale, Rectangle source, float layernum, string contentName)
         {
             Transform transform = obj.GetComponent<Transform>();
             Sprite sprite = obj.GetComponent<Sprite>();
 
-            obj.Name = getProperty("Name", tile, tileset);
+            //obj.Name = getProperty("Name", tile, tileset);
 
-            transform.Position = new Vector(x, y);
-            transform.Scale = new Vector(map.TileWidth, map.TileHeight);
+            transform.Position = position;
+            transform.Scale = scale;
 
-            sprite.ContentName = "spritesheet";
-            sprite.SpriteLocation =
-                new Rectangle(col * map.TileWidth + col * map.Tilesets[tileset].Spacing + map.Tilesets[tileset].Margin,
-                              row * map.TileHeight + row * map.Tilesets[tileset].Spacing + map.Tilesets[tileset].Margin,
-                              map.TileWidth, map.TileHeight);
+            sprite.ContentName = contentName;
+            sprite.SpriteLocation = source;
             sprite.Layer = layernum;
         }
 
-        private static string getProperty(string name, TmxLayerTile tile, int tileset, string unknownProp = "Unamed")
+        private static void setCollision(Entity obj, Rectangle collider)
+        {
+            BoxCollision col = obj.GetComponent<BoxCollision>();
+            col.Position = new Vector(collider.X, collider.Y);
+            col.Scale = new Vector(collider.Width / (float)tilemap.TileWidth, collider.Height / (float)tilemap.TileHeight);
+            col.TriggerOnly = false;
+        }
+
+        /*private static string getProperty(string name, TmxLayerTile tile, int tileset, string unknownProp = "Unamed")
         {
             if (map.Tilesets[tileset].Tiles.ContainsKey(tile.Gid - 1))
             {
@@ -108,7 +151,7 @@ namespace MonoGameWindowsStarter.Systems.Global
                     return map.Tilesets[tileset].Tiles[tile.Gid - 1].Properties[name];
             }
             return unknownProp;
-        }
+        }*/
 
         private static void removeMapObjects()
         {

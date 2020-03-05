@@ -3,7 +3,7 @@
  <editorsettings>
   <export target="../../../../../../Documents/level1.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" source="Basic Platformer.tsx"/>
+ <tileset firstgid="1" source="basic_platformer.tsx"/>
  <layer id="2" name="Background" width="74" height="25">
   <data encoding="csv">
 230,230,230,230,230,230,230,230,230,230,230,230,230,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,230,230,230,230,230,230,230,230,230,230,230,230,
