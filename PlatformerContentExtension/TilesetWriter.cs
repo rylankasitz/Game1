@@ -55,6 +55,12 @@ namespace PlatformerContentExtension
                 output.Write(tile.BoxCollision.Y);
                 output.Write(tile.BoxCollision.Width);
                 output.Write(tile.BoxCollision.Height);
+                output.Write(tile.Properties.Count);
+                foreach(KeyValuePair<string, string> prop in tile.Properties)
+                {
+                    output.Write(prop.Key);
+                    output.Write(prop.Value);
+                }
             }
 
         }

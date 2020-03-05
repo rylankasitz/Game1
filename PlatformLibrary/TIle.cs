@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace PlatformLibrary
 {
@@ -10,38 +11,24 @@ namespace PlatformLibrary
     {
         #region Properties
 
-        // The tile's source rectangle
         public Rectangle Source { get; set; }
-
         public Rectangle BoxCollider { get; set; }
-
-        // The tile's texture
         public Texture2D Texture { get; set; }
+        public Dictionary<string, string> Properties { get; set; }
 
-        /// <summary>
-        /// Gets the tile's width
-        /// </summary>
         public int Width => Source.Width;
-
-        /// <summary>
-        /// Gets the tile's height
-        /// </summary>
         public int Height => Source.Height;
 
         #endregion
 
         #region Initialization
 
-        /// <summary>
-        /// Constructs a new tile
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="texture"></param>
-        public Tile(Rectangle source, Rectangle boxCollider, Texture2D texture)
+        public Tile(Rectangle source, Rectangle boxCollider, Dictionary<string, string> properties, Texture2D texture)
         {
             Texture = texture;
             Source = source;
             BoxCollider = boxCollider;
+            Properties = properties;
         }
 
         #endregion

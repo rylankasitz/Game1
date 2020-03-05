@@ -49,8 +49,16 @@ namespace PlatformLibrary
                     input.ReadInt32(),
                     input.ReadInt32());
 
+                int propLength = input.ReadInt32();
+                Dictionary<string, string> properties = new Dictionary<string, string>();
+
+                for(int j = 0; j < propLength; j++)
+                {
+                    properties.Add(input.ReadString(), input.ReadString());
+                }
+
                 // Create the tile
-                tiles[i] = new Tile(source, boxCollision, texture);
+                tiles[i] = new Tile(source, boxCollision, properties, texture);
             }
 
             // Construct and return the tileset

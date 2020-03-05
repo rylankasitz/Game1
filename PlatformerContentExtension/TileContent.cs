@@ -16,6 +16,11 @@ namespace PlatformerContentExtension
         public Rectangle Source { get; set; }
         public bool Solid { get; set; }
         public Rectangle BoxCollision { get; set; } = Rectangle.Empty;
-        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Properties { get; set; }
+
+        public TileContent()
+        {
+            Properties = new Dictionary<string, string>();
+        }
     }
 }

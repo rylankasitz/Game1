@@ -53,16 +53,33 @@ namespace PlatformerContentExtension
             foreach(XmlNode node in tiles) 
             {
                 int id = int.Parse(node.Attributes["id"].Value);
-                XmlNode collision = node.SelectNodes("//objectgroup")[0].SelectNodes("//object")[0];
-                float x = float.Parse(collision.Attributes["x"].Value);
-                float y = float.Parse(collision.Attributes["y"].Value);
-                float width = float.Parse(collision.Attributes["width"].Value);
-                float height = float.Parse(collision.Attributes["height"].Value);
-
+       
                 tileContent[id] = new TileContent();
-                tileContent[id].BoxCollision = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                
+                // Get properties
+                XmlNodeList children = node.ChildNodes;
+                foreach(XmlNode child in children)
+                {
+                    if (child.Name == "properties")
+                    {
+                        XmlNodeList properity = child.ChildNodes;
+                        foreach (XmlNode p in properity)
+                        {
+                            if(p.Name == "property")
+                                tileContent[id].Properties[p.Attributes["name"].Value] = p.Attributes["value"].Value;
+                        }
+                    }       
+                    if (child.Name == "objectgroup")
+                    {
+                        XmlNode collision = child.FirstChild;
+                        float x = float.Parse(collision.Attributes["x"].Value);
+                        float y = float.Parse(collision.Attributes["y"].Value);
+                        float width = float.Parse(collision.Attributes["width"].Value);
+                        float height = float.Parse(collision.Attributes["height"].Value);
+                        tileContent[id].BoxCollision = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                    }
+                }
 
-                XmlNodeList properites = node.SelectNodes("//properties");
             }
 
             // Create and return the TileContent
