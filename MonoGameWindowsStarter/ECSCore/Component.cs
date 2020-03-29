@@ -10,5 +10,6 @@ namespace MonoGameWindowsStarter.ECSCore
     public class Component : Attribute
     {
         public string Type { get; set; }
+        public bool Enabled { get; set; } = true;
     }
 }

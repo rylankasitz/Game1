@@ -36,7 +36,31 @@ namespace MonoGameWindowsStarter.ECSCore
             int cellX = (int)(transform.Position.X / CELL_SIZE);
             int cellY = (int)(transform.Position.Y / CELL_SIZE);
 
-            cells[cellX][cellY] = null;
+            Entity current = cells[cellX][cellY];
+            Entity prev = null;
+
+            int index = 0;
+            while (index < 0 && current != null)
+            {
+                prev = current;
+                current = current.Next;
+                index++;
+            }
+
+            if (current != null)
+            {
+                if (prev == null)
+                {
+                    cells[cellX][cellY] = current.Next;
+                }
+                else
+                {
+                    prev.Next = current.Next;
+                    current = null;
+                }
+
+                current = null;
+            }
         }
 
         public void Add(Entity entity)

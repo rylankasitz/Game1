@@ -16,10 +16,12 @@ using MonoGameWindowsStarter.PlatformerGame.Scenes;
 namespace MonoGameWindowsStarter.PlatformerGame.Entities
 {
     [Transform(X: 260, Y: 340, Width: 20, Height: 20)]
-    [Sprite(ContentName: "spritesheet", Layer: 0f)]
+    [Sprite(ContentName: "spritesheet", Layer: 0.1f)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
     [Animation(CurrentAnimation: "PlayerWalk")]
+    [ParticleSystem(Texture: "Sprites/Pixel", ParticleCount: 20, SpawnPerFrame: 2, Time: -1f, 
+                    EmmiterX: 0f, EmmiterY: 1, DirectionX: -1, DirectionY: 0, Range: 30, Life: .5f)]
     [StateMachine()]
     public class Player : Entity
     {
@@ -33,6 +35,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         private Animation animation;
         private Sprite sprite;
         private StateMachine stateMachine;
+        private ParticleSystem particleSystem;
+        private Gun gun;
 
         private bool isGrounded;
         private double waitTime;
@@ -46,6 +50,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             animation = GetComponent<Animation>();
             sprite = GetComponent<Sprite>();
             stateMachine = GetComponent<StateMachine>();
+            particleSystem = GetComponent<ParticleSystem>();
+            gun = SceneManager.GetCurrentScene().CreateEntity<Gun>();
 
             stateMachine.States.Add("idle", idle);
             stateMachine.States.Add("walk left", walkLeft);
@@ -55,6 +61,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             stateMachine.States.Add("next level", nextLevel);
             stateMachine.CurrentState = "idle";
 
+            particleSystem.Color = Color.WhiteSmoke;
             boxCollision.HandleCollision = handleCollision;
             isGrounded = false;
 
@@ -67,6 +74,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         public override void Update(GameTime gameTime) 
         {
             handleStates();
+
+            gun.SetPos(transform.Position + transform.Scale/2);
 
             Camera.Position.X = (int) transform.Position.X;
             Camera.Position.Y = 300;
@@ -82,6 +91,12 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             if (collider.Name == "Lava" || collider.Name == "Water" || collider.Name == "Enemy")
             {
                 transform.Position = new Vector(260, 340);
+                foreach(Enemy enemy in SceneManager.GetCurrentScene().GetEntities<Enemy>())
+                {
+                    enemy.GetComponent<Sprite>().Enabled = true;
+                    enemy.GetComponent<BoxCollision>().Enabled = true;
+                    enemy.GetComponent<Physics>().Velocity.X = 1;
+                }
             }
 
             if (collider.Name == "Flag")
@@ -155,7 +170,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
                             MapManager.LoadMap(SceneManager.GetCurrentScene().GameManager.Content, "Level2", SceneManager.GetCurrentScene());
                             levelnum++;
                             transform.Position = new Vector(260, 340);
-                            ((Level)SceneManager.GetCurrentScene()).WinScreen.Show("");
+                            ((Level1)SceneManager.GetCurrentScene()).WinScreen.Show("");
                         }
                     }
                     break;
@@ -172,6 +187,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         {
             animation.CurrentAnimation = "PlayerIdle";
             physics.Velocity.X = 0;
+            particleSystem.Stop();
         }
 
         private void walkLeft(GameTime gameTime)
@@ -179,6 +195,9 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             physics.Velocity.X = -Speed;
             sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
             animation.CurrentAnimation = "PlayerWalk";
+            particleSystem.Direction = new Vector(1, -0.33f);
+            particleSystem.Emitter = new Vector(1, 1);
+            particleSystem.Play();
         }
 
         private void walkRight(GameTime gameTime)
@@ -186,12 +205,16 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
             physics.Velocity.X = Speed;
             sprite.SpriteEffects = SpriteEffects.None;
             animation.CurrentAnimation = "PlayerWalk";
+            particleSystem.Direction = new Vector(-1, -0.33f);
+            particleSystem.Emitter = new Vector(0, 1);
+            particleSystem.Play();
         }
 
         private void jump(GameTime gameTime)
         {
             physics.Velocity.Y = -JumpForce;
             animation.CurrentAnimation = "Jump";
+            particleSystem.Stop();
         }
 
         private void falling(GameTime gameTime)
@@ -215,7 +238,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
         private void nextLevel(GameTime gameTime)
         {
             waitTime += gameTime.ElapsedGameTime.TotalSeconds;
-            ((Level)SceneManager.GetCurrentScene()).WinScreen.Show("Level Complete");
+            ((Level1)SceneManager.GetCurrentScene()).WinScreen.Show("Level Complete");
         }
 
         #endregion

@@ -14,6 +14,8 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
     [Sprite(ContentName: "spritesheet", Layer: .05f)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 6, Width: 1, Height: .5f, TriggerOnly: true)]
+    [ParticleSystem(Texture: "Sprites/Pixel", ParticleCount: 100, SpawnPerFrame: 1, Time: .5f,
+                    EmmiterX: .5f, EmmiterY: 1, DirectionX: -1, DirectionY: 0, Range: 360, Scale: 2f)]
     [Animation(CurrentAnimation: "EnemyFly")]
     public class Enemy : Entity
     {
@@ -23,6 +25,7 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
 
         private Physics physics;
         private Sprite sprite;
+        private ParticleSystem particleSystem;
 
         public override void Initialize()
         {
@@ -30,7 +33,9 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
 
             physics = GetComponent<Physics>();
             sprite = GetComponent<Sprite>();
+            particleSystem = GetComponent<ParticleSystem>();
 
+            particleSystem.Color = Color.Black;
             physics.Velocity.X = -Speed;
         }
 
@@ -43,6 +48,14 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
                 switchDirection();
                 ElapsedTime = 0;
             }
+        }
+
+        public void Explode()
+        {
+            particleSystem.Play();
+            physics.Velocity.X = 0;
+            sprite.Enabled = false;
+            GetComponent<BoxCollision>().Enabled = false;
         }
 
         private void switchDirection()

@@ -21,7 +21,6 @@ namespace MonoGameWindowsStarter.Systems.Global
 
         public static void LoadMap (ContentManager content, string name, Scene scene)
         {
-            //map = new TmxMap(content.RootDirectory + "\\Maps\\" + name + ".tmx");
             tilemap = content.Load<Tilemap>("Maps\\" + name);
 
             removeMapObjects();

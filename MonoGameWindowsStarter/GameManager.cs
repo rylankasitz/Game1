@@ -28,6 +28,7 @@ namespace MonoGameWindowsStarter
         private PhysicsHandler physicsHandler;
         private AnimationHandler animationHandler;
         private StateHandler stateHandler;
+        private ParticleSystemHandler particleSystemHandler;
 
         public GameManager()
         {
@@ -42,6 +43,7 @@ namespace MonoGameWindowsStarter
             systems.Add(physicsHandler = new PhysicsHandler());
             systems.Add(animationHandler = new AnimationHandler(Content));
             systems.Add(stateHandler = new StateHandler());
+            systems.Add(particleSystemHandler = new ParticleSystemHandler());
         }
 
         #region Monogame Methods
@@ -66,6 +68,7 @@ namespace MonoGameWindowsStarter
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             AudioManager.LoadContent(Content);
+            particleSystemHandler.LoadContent(Content);
 
             renderer.LoadContent(Content);
         }
@@ -83,6 +86,7 @@ namespace MonoGameWindowsStarter
             collisionHandler.CheckCollisions();
             animationHandler.UpdateAnimations(gameTime);
             stateHandler.UpdateStateMachine(gameTime);
+            particleSystemHandler.UpdateParticleSystems(gameTime);
 
             SceneManager.UpdateScene(gameTime);
 
@@ -98,6 +102,7 @@ namespace MonoGameWindowsStarter
             spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, Camera.GetTransformation());
 
             renderer.Draw(spriteBatch);
+            particleSystemHandler.DrawParticleSystems(spriteBatch);
 
             spriteBatch.End();
 

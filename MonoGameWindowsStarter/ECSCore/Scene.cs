@@ -60,6 +60,21 @@ namespace MonoGameWindowsStarter.ECSCore
             return null;
         }
 
+        public List<T> GetEntities<T>() where T : Entity, new()
+        {
+            List<T> entities = new List<T>();
+            foreach (Entity entity in Entities)
+            {
+                // Make more efficient
+                if (entity.GetType().Name == typeof(T).Name)
+                {
+                    entities.Add((T)entity);
+                }
+            }
+
+            return entities;
+        }
+
         public void LoadScene(List<System> systems, GameManager game)
         {
             this.systems = systems;

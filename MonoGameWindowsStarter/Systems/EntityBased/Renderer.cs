@@ -53,7 +53,7 @@ namespace MonoGameWindowsStarter.Systems
             {
                 Transform transform = entity.GetComponent<Transform>();
 
-                if (entity.HasComponent<Sprite>())
+                if (entity.HasComponent<Sprite>() && entity.GetComponent<Sprite>().Enabled)
                 {
                     Sprite sprite = entity.GetComponent<Sprite>();
                     spriteBatch.Draw(textures[sprite.ContentName],

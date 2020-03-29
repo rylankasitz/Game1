@@ -119,18 +119,21 @@ namespace MonoGameWindowsStarter.Systems
             BoxCollision collider1 = entity1.GetComponent<BoxCollision>();
             BoxCollision collider2 = entity2.GetComponent<BoxCollision>();
 
-            if (collider1.Layer != collider2.Layer || (collider1.Layer == "All" && collider2.Layer == "All"))
+            if (collider1.Enabled && collider2.Enabled)
             {
-                Transform transform1 = entity1.GetComponent<Transform>();
-                Transform transform2 = entity2.GetComponent<Transform>();
-
-                if (checkCollision(collider1, collider2, transform1, transform2))
+                if (collider1.Layer != collider2.Layer || (collider1.Layer == "All" && collider2.Layer == "All"))
                 {
-                    string side1 = handlePhysics(entity1, transform1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
-                    string side2 = handlePhysics(entity2, transform2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
+                    Transform transform1 = entity1.GetComponent<Transform>();
+                    Transform transform2 = entity2.GetComponent<Transform>();
 
-                    collider1.HandleCollision?.Invoke(entity2, side1);
-                    collider2.HandleCollision?.Invoke(entity1, side2);
+                    if (checkCollision(collider1, collider2, transform1, transform2))
+                    {
+                        string side1 = handlePhysics(entity1, transform1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
+                        string side2 = handlePhysics(entity2, transform2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
+
+                        collider1.HandleCollision?.Invoke(entity2, side1);
+                        collider2.HandleCollision?.Invoke(entity1, side2);
+                    }
                 }
             }
         }

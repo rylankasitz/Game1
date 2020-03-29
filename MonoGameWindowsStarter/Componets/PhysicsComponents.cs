@@ -27,6 +27,16 @@ namespace MonoGameWindowsStarter.Componets
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
     }
 
+    public class Particle
+    {
+        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
+        public Vector2 Acceleration { get; set; }
+        public float Scale { get; set; }
+        public float Life { get; set; }
+        public Color Color { get; set; }
+    }
+
     public class Transform : Component
     {
         public Vector Position { get; set; }
@@ -63,6 +73,56 @@ namespace MonoGameWindowsStarter.Componets
             Position = new Vector(X, Y);
             Scale = new Vector(Width, Height);
             this.TriggerOnly = TriggerOnly;
+        }
+    }
+
+    public class ParticleSystem : Component
+    {
+        public Particle[] Particles { get; set; }
+        public Vector Emitter { get; set; }
+        public Vector Direction { get; set; }
+        public string Texture { get; set; }
+        public int SpawnPerFrame { get; set; }
+        public int ParticleCount { get; set; }
+        public float Time { get; set; }
+        public float Life { get; set; }
+        public float Scale { get; set; }
+        public float Velocity { get; set; }
+        public float Acceleration { get; set; }
+        public float Range { get; set; }
+        public Color Color { get; set; }
+        public int NextIndex { get; set; } = 0;
+        public bool Running { get; set; } = true;
+        public float ElapsedTime { get; set; }
+
+        public ParticleSystem() { }
+        public ParticleSystem(string Texture, int SpawnPerFrame, int ParticleCount, float Time,
+            float EmmiterX, float EmmiterY, float DirectionX, float DirectionY, float Range,
+            float Life = 3f, float Scale = 1f, float Velocity = 100f, float Acceleration = .1f)
+        {
+            this.Texture = Texture;
+            this.SpawnPerFrame = SpawnPerFrame;
+            this.ParticleCount = ParticleCount;
+            this.Time = Time;
+            Emitter = new Vector(EmmiterX, EmmiterY);
+            Direction = new Vector(DirectionX - .5f, DirectionY - .5f);
+            this.Range = Range/90;
+            this.Life = Life;
+            this.Scale = Scale;
+            this.Velocity = Velocity;
+            this.Acceleration = Acceleration;
+            this.ElapsedTime = Time;
+        }
+
+
+        public void Play()
+        {
+            Running = true;
+            ElapsedTime = 0;
+        }
+        public void Stop()
+        {
+            Running = false;
         }
     }
 }
