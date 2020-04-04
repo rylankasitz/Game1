@@ -92,7 +92,10 @@ namespace MonoGameWindowsStarter.PlatformerGame.Entities
                 Enemy enemy = (Enemy)collider;
                 enemy.Explode();
             }
-            SceneManager.GetCurrentScene().RemoveEntity(this);
+            GetComponent<BoxCollision>().Enabled = false;
+            GetComponent<Sprite>().Enabled = false;
+            physics.Velocity.X = 0;
+            //SceneManager.GetCurrentScene().RemoveEntity(this);
         }
 
         public void SetVelocity(float x, float y)

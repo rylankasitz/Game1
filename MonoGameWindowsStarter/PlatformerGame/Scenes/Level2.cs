@@ -20,6 +20,10 @@ namespace MonoGameWindowsStarter.PlatformerGame.Scenes
             MapManager.LoadMap(GameManager.Content, "level2", this);
 
             CreateEntity<Player>();
+            CreateEntity<Background1>();
+            CreateEntity<Background2>();
+            CreateEntity<Background3>();
+            CreateEntity<Background4>();
             WinScreen = CreateEntity<WinScreen>();
         }
 

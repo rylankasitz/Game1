@@ -43,7 +43,7 @@ namespace MonoGameWindowsStarter.Systems.Global
                         uint tileIndex = layer.Data[dataIndex];
                         if (tileIndex != 0 && tileIndex < tilemap.Tiles.Length)
                         {
-                            Vector position = new Vector(x * tilemap.TileWidth, y * tilemap.TileHeight);
+                            Vector position = new Vector(x * (tilemap.TileWidth-1), y * (tilemap.TileHeight-1));
                             Vector scale = new Vector(tilemap.Tiles[tileIndex].Width, tilemap.Tiles[tileIndex].Height);
 
                             Tile tile = tilemap.Tiles[tileIndex];

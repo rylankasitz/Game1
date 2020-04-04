@@ -18,7 +18,7 @@ namespace MonoGameWindowsStarter.Componets
         public float Layer { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
         public Sprite() { }
-        public Sprite(string ContentName, int SpriteX = 0, int SpriteY = 0, int SpriteWidth = 1, int SpriteHeight = 1, float Layer = 1f, 
+        public Sprite(string ContentName, int SpriteX = 0, int SpriteY = 0, int SpriteWidth = 0, int SpriteHeight = 0, float Layer = 1f, 
             SpriteEffects SpriteEffects = SpriteEffects.None)
         {
             this.ContentName = ContentName;
@@ -48,6 +48,30 @@ namespace MonoGameWindowsStarter.Componets
         public TextDraw(string Text)
         {
             this.Text = Text;
+        }
+    }
+
+    public class Parallax : Component
+    {
+        public int Layer { get; set; }
+        public float LayerNum { get; set; }
+        public bool Repeat { get; set; }
+        public float Speed { get; set; }
+        public float ElapsedTime { get; set; }
+        public Vector RepeatCount { get; set; } = new Vector(0, 1);
+        public Matrix Transform
+        {
+            get
+            {
+                return Matrix.CreateTranslation(-ElapsedTime * Speed, 0, 0);
+            }
+        }
+        public Parallax() { }
+        public Parallax(int Layer = 0, bool Repeat = true, float Speed = 100f)
+        {
+            this.Layer = Layer;
+            this.Repeat = Repeat;
+            this.Speed = Speed;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameWindowsStarter.ECSCore;
@@ -6,6 +7,7 @@ using MonoGameWindowsStarter.Systems;
 using MonoGameWindowsStarter.Systems.Global;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -29,6 +31,7 @@ namespace MonoGameWindowsStarter
         private AnimationHandler animationHandler;
         private StateHandler stateHandler;
         private ParticleSystemHandler particleSystemHandler;
+        private ParallaxHandler parallaxHandler;
 
         public GameManager()
         {
@@ -44,6 +47,7 @@ namespace MonoGameWindowsStarter
             systems.Add(animationHandler = new AnimationHandler(Content));
             systems.Add(stateHandler = new StateHandler());
             systems.Add(particleSystemHandler = new ParticleSystemHandler());
+            systems.Add(parallaxHandler = new ParallaxHandler());
         }
 
         #region Monogame Methods
@@ -65,12 +69,23 @@ namespace MonoGameWindowsStarter
 
         protected override void LoadContent()
         {
+            Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            AudioManager.LoadContent(Content);
-            particleSystemHandler.LoadContent(Content);
+            string[] files = Directory.GetFiles(Content.RootDirectory + "\\Sprites", "*.xnb", SearchOption.AllDirectories);
 
-            renderer.LoadContent(Content);
+            foreach (string file in files)
+            {
+                string filename = Path.GetFileNameWithoutExtension(file);
+                textures[filename] = Content.Load<Texture2D>("Sprites\\" + filename);
+            }
+
+            AudioManager.LoadContent(Content);
+
+            particleSystemHandler.LoadContent(Content);
+            renderer.LoadContent(Content, textures);
+            parallaxHandler.LoadContent(textures);
         }
 
         protected override void UnloadContent() { }
@@ -87,6 +102,7 @@ namespace MonoGameWindowsStarter
             animationHandler.UpdateAnimations(gameTime);
             stateHandler.UpdateStateMachine(gameTime);
             particleSystemHandler.UpdateParticleSystems(gameTime);
+            parallaxHandler.UpdateParallax(gameTime);
 
             SceneManager.UpdateScene(gameTime);
 
@@ -99,11 +115,13 @@ namespace MonoGameWindowsStarter
         {
             GraphicsDevice.Clear(Color.LightGray);
 
+            parallaxHandler.Draw(spriteBatch, this);
+
             spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, Camera.GetTransformation());
 
             renderer.Draw(spriteBatch);
-            particleSystemHandler.DrawParticleSystems(spriteBatch);
 
+            particleSystemHandler.DrawParticleSystems(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
